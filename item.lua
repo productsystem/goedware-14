@@ -10,7 +10,7 @@ function Item.new(x,y)
 end
 
 function Item:draw()
-    if self.picked then
+    if self.picked or self.consumed then
         return
     end
     love.graphics.setColor(1,1,0.2)
