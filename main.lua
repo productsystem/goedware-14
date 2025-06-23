@@ -1,8 +1,10 @@
 local Player = require("player")
 local Entity = require("entity")
+local Item = require("item")
 
 local player
 local entities = {}
+local items = {}
 
 function love.load()
     love.window.setTitle("Project Oil")
@@ -19,7 +21,8 @@ function love.load()
 end
 
 function love.update(dt)
-    player:update(dt,entities)
+    player:update(dt,entities,items)
+    love.keyboard.wasPressed = {}
 end
 
 function love.draw()
@@ -28,9 +31,20 @@ function love.draw()
     for _,e in ipairs(entities) do
         e:draw()
     end
+    
+    for _,i in ipairs(items) do
+        i:draw()
+    end
 
     love.graphics.setColor(1,1,1,1)
     love.graphics.print("Oil : " .. tostring(player.oil), 10,10)
     love.graphics.print("Player: " .. math.floor(player.x) .. ", " .. math.floor(player.y), 10, 30)
+    love.graphics.print(_VERSION, 10, 50)
 
+end
+
+function love.keypressed(key)
+    if not love.keyboard.wasPressed then love.keyboard.wasPressed = {} end
+    love.keyboard.wasPressed[key] = true
+    
 end

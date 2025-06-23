@@ -1,0 +1,19 @@
+{
+  "runtime": {
+    "version": "Lua 5.1",
+    "path": [
+      "?.lua",
+      "?/init.lua"
+    ]
+  },
+  "workspace": {
+    "library": [
+      "love"
+    ],
+    "checkThirdParty": false
+  },
+  "diagnostics": {
+    "globals": ["love"],
+    "disable": ["deprecated"]
+  }
+}
