@@ -4,7 +4,7 @@ local Item = require("item")
 --simulates OOP
 Player.__index = Player
 
-function Player.new(x,y)
+function Player.new(x,y,world)
     --lookup meta data from the table
     local self = setmetatable({}, Player)
     self.x,self.y = x,y
@@ -15,13 +15,15 @@ function Player.new(x,y)
     self.angle = 0
     self.swingTimer = 0
     self.swingDuration = 0.2
+    self.collider = world:newBSGRectangleCollider(400,250,40,80,5)
+    self.collider:setFixedRotation(true)
     self.holdingItem = nil
     return self
 end
 
 --Player:update(dt) == Player.update(self,dt)
-function Player:update(dt,entities,items)
-    self:handleMovement(dt)
+function Player:update(dt,entities,items, cam)
+    self:handleMovement(dt,cam)
     if self:canAttack() then
         self.swingTimer = self.swingDuration
     end
@@ -89,7 +91,7 @@ function Player:attemptSlash(entities,items)
     
 end
 
-function Player:handleMovement(dt)
+function Player:handleMovement(dt,cam)
     local dx,dy =0,0
     if love.keyboard.isDown("w") then
         dy = dy-1
@@ -106,11 +108,14 @@ function Player:handleMovement(dt)
 
     local len = math.sqrt(dx*dx + dy*dy)
     if len>0 then
-        self.x = self.x + (dx/len) * self.speed * dt
-        self.y = self.y + (dy/len) * self.speed * dt
+        -- self.x = self.x + (dx/len) * self.speed * dt
+        -- self.y = self.y + (dy/len) * self.speed * dt
+        self.collider:setLinearVelocity((dx/len) * self.speed,(dy/len) * self.speed)
+    else
+        self.collider:setLinearVelocity(0,0)
     end
 
-    local mx,my = love.mouse.getPosition()
+    local mx,my = cam:worldCoords(love.mouse.getPosition())
     local px,py = self.x + self.w/2, self.y + self.h/2
     self.angle = math.atan2(my-py,mx-px)
 end
