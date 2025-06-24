@@ -48,8 +48,9 @@ function love.update(dt)
 
     world:update(dt)
 
-    player.x = player.collider:getX()
-    player.y = player.collider:getY()
+    local cx, cy = player.collider:getPosition()
+    player.x = cx - player.w / 2
+    player.y = cy - player.h / 2
 
     cam:lookAt(player.x,player.y)
     local w = love.graphics.getWidth()

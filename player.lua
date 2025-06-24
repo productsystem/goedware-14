@@ -15,8 +15,9 @@ function Player.new(x,y,world)
     self.angle = 0
     self.swingTimer = 0
     self.swingDuration = 0.2
-    self.collider = world:newBSGRectangleCollider(400,250,40,80,5)
-    self.collider:setFixedRotation(true)
+    local cx = x + self.w / 2
+    local cy = y + self.h / 2
+    self.collider = world:newBSGRectangleCollider(cx, cy, self.w, self.h, 5)
     self.holdingItem = nil
     return self
 end
@@ -92,6 +93,10 @@ function Player:attemptSlash(entities,items)
 end
 
 function Player:handleMovement(dt,cam)
+    local cx, cy = self.collider:getPosition()
+    self.x = cx - self.w / 2
+    self.y = cy - self.h / 2
+
     local dx,dy =0,0
     if love.keyboard.isDown("w") then
         dy = dy-1
@@ -126,21 +131,21 @@ end
 
 function Player:draw()
     love.graphics.setColor(1,1,0,1)
-    love.graphics.push()
-    local cx,cy = self.x + self.w/2,self.y + self.h/2
-    love.graphics.translate(cx,cy)
-    love.graphics.rotate(self.angle)
-    love.graphics.rectangle("fill", -self.w/2,-self.h/2, self.w,self.h)
-    if(self.swingTimer > 0) then
-        local alpha = self.swingTimer/self.swingDuration
-        love.graphics.setColor(1,0.5,0,alpha)
-        love.graphics.rectangle("fill", self.w/2, 0, 10,30) --TODO: Change
+    love.graphics.rectangle("fill", self.x, self.y, self.w, self.h)
+    if self.swingTimer > 0 then
+        local alpha = self.swingTimer / self.swingDuration
+        love.graphics.setColor(1, 0.5, 0, alpha)
+        local px = self.x + self.w / 2
+        local py = self.y + self.h / 2
+        local offsetX = math.cos(self.angle) * 20
+        local offsetY = math.sin(self.angle) * 20
+        love.graphics.rectangle("fill", px + offsetX, py + offsetY, 10, 10)
     end
+
     if self.holdingItem then
         love.graphics.setColor(1, 1, 0.2)
-        love.graphics.rectangle("fill", 0, -self.h - 10, 10, 10)
+        love.graphics.rectangle("fill", self.x + self.w / 2 - 5, self.y - 15, 10, 10)
     end
-    love.graphics.pop()
 end
 
 return Player
