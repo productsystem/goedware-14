@@ -96,7 +96,7 @@ function love.update(dt)
         e:update(dt, player)
 
         if e:isDead() then
-            local item = Item.new(e.x + e.w / 2, e.y + e.h / 2)
+            local item = Item.new(e.x + e.w / 2, e.y + e.h / 2, "enemy")
             table.insert(items, item)
             e.collider:destroy()
             table.remove(enemies, i)

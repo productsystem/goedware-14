@@ -24,8 +24,8 @@ function Grinder:update(dt,items,player)
             local d = math.sqrt((self.x - ix)^2 + (self.y -iy)^2)
             if d<self.radius then
                 item.consumed = true
-                player.oil = player.oil + 1
-                self.oilProduced = self.oilProduced + 1
+                player.oil = player.oil + item.oilValue
+                self.oilProduced = self.oilProduced + item.oilValue
             end
         end
     end

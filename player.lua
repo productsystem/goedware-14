@@ -4,6 +4,17 @@ local Item = require("item")
 --simulates OOP
 Player.__index = Player
 
+local function getItemColor(itemType)
+    if itemType == "tree" then
+        return 0.6, 0.4, 0.2
+    elseif itemType == "enemy" then
+        return 1, 0.3, 0.3
+    else
+        return 1, 1, 0.2
+    end
+end
+
+
 function Player.new(x,y,world)
     --lookup meta data from the table
     local self = setmetatable({}, Player)
@@ -91,7 +102,7 @@ function Player:attemptSlash(entities,items,enemies)
                     end
                     self.hitEntities[e] = true
                     -- self.oil = self.oil + 1
-                    local item = Item.new(e.x + e.w/2,e.y + e.h/2)
+                    local item = Item.new(e.x + e.w/2,e.y + e.h/2,e.type)
                     table.insert(items,item)
                 end
             end
@@ -170,7 +181,7 @@ function Player:draw()
     end
 
     if self.holdingItem then
-        love.graphics.setColor(1, 1, 0.2)
+        love.graphics.setColor(getItemColor(self.holdingItem.itemType))
         love.graphics.rectangle("fill", self.x + self.w / 2 - 5, self.y - 15, 10, 10)
     end
 end
