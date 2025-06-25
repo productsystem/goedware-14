@@ -40,6 +40,9 @@ return {
       tiles = {
         {
           id = 0,
+          properties = {
+            ["resourceType"] = "tree"
+          },
           image = "../objects/tree1.png",
           width = 32,
           height = 64

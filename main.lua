@@ -2,12 +2,14 @@ local Player = require("player")
 local Entity = require("entity")
 local Item = require("item")
 local Grinder = require("grinder")
+local Enemy = require("enemy")
 
 local player
 local entities = {}
 local items = {}
 local grinder
 local walls = {}
+local enemies = {}
 
 sti = require("libs.sti")
 camera = require("libs.camera")
@@ -40,15 +42,15 @@ function love.load()
             end
         end
     end
-    print("Loaded GIDs:")
-    for gid, tile in pairs(gameMap.tiles) do
-        print("GID:", gid, tile.image and "Has image" or "No image")
+    for i = 1, 3 do
+        local ex = math.random(100, 700)
+        local ey = math.random(100, 500)
+        table.insert(enemies, Enemy.new(ex, ey, world))
     end
-
 end
 
 function love.update(dt)
-    player:update(dt,entities,items,cam)
+    player:update(dt,entities,items,cam,enemies)
     grinder:update(dt,items,player)
     love.keyboard.wasPressed = {}
 
@@ -89,6 +91,17 @@ function love.update(dt)
         end
     end
 
+    for i = #enemies, 1, -1 do
+        local e = enemies[i]
+        e:update(dt, player)
+
+        if e:isDead() then
+            local item = Item.new(e.x + e.w / 2, e.y + e.h / 2)
+            table.insert(items, item)
+            e.collider:destroy()
+            table.remove(enemies, i)
+        end
+    end
 end
 
 function love.draw()
@@ -103,6 +116,10 @@ function love.draw()
 
         for _, i in ipairs(items) do
             table.insert(drawables, i)
+        end
+
+        for _, e in ipairs(enemies) do
+            table.insert(drawables, e)
         end
 
         table.insert(drawables, grinder)

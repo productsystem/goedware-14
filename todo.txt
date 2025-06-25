@@ -9,12 +9,12 @@ Things To-Do:
 [ ] - SFX
 [ ] - Music
 [ ] - Rocket
-[ ] - Enemy behaviour
+[x] - Enemy behaviour
 [ ] - Item sprites
 [ ] - UI
 [ ] - Story
 [x] - Tiled implementation of entities
 [x] - Draw order
-[ ] - 
+[ ] - Player Health
 [ ] - 
 [ ] - 

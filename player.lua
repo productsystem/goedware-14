@@ -20,19 +20,21 @@ function Player.new(x,y,world)
     self.collider = world:newBSGRectangleCollider(cx, cy, self.w, self.h, 5)
     self.collider:setFixedRotation(true)
     self.holdingItem = nil
+    self.hitEntities = {}
     return self
 end
 
 --Player:update(dt) == Player.update(self,dt)
-function Player:update(dt,entities,items, cam)
+function Player:update(dt,entities,items, cam,enemies)
     self:handleMovement(dt,cam)
     if self:canAttack() then
         self.swingTimer = self.swingDuration
+        self.hitEntities = {}
     end
 
     if(self.swingTimer > 0) then
         self.swingTimer = self.swingTimer - dt
-        self:attemptSlash(entities,items)
+        self:attemptSlash(entities,items,enemies)
     end
 
     if love.keyboard.wasPressed and love.keyboard.wasPressed["e"] then
@@ -62,9 +64,9 @@ function Player:pickupAndDrop(items)
     
 end
 
-function Player:attemptSlash(entities,items)
+function Player:attemptSlash(entities,items,enemies)
     for _, e in ipairs(entities) do
-        if not e.harvested then
+        if not e.harvested and not self.hitEntities[e] then
             local ex = e.x + e.w / 2
             local ey = e.y + e.h / 2
             local px = self.x + self.w / 2
@@ -87,6 +89,7 @@ function Player:attemptSlash(entities,items)
                         e.collider:destroy()
                         e.collider = nil
                     end
+                    self.hitEntities[e] = true
                     -- self.oil = self.oil + 1
                     local item = Item.new(e.x + e.w/2,e.y + e.h/2)
                     table.insert(items,item)
@@ -94,7 +97,26 @@ function Player:attemptSlash(entities,items)
             end
         end
     end
-    
+    for _, enemy in ipairs(enemies) do
+        local ex = enemy.x + enemy.w / 2
+        local ey = enemy.y + enemy.h / 2
+        local px = self.x + self.w / 2
+        local py = self.y + self.h / 2
+        local dx = ex - px
+        local dy = ey - py
+        local dist = math.sqrt(dx * dx + dy * dy)
+
+        if dist < self.attackRadius then
+            local angleToEnemy = math.atan2(dy, dx)
+            local diff = math.abs(angleToEnemy - self.angle)
+            if diff > math.pi then diff = 2 * math.pi - diff end
+
+            if diff < math.rad(30) and not self.hitEntities[enemy] then
+                enemy:takeDamage(1)
+                self.hitEntities[enemy] = true
+            end
+        end
+    end
 end
 
 function Player:handleMovement(dt,cam)
