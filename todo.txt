@@ -1,0 +1,20 @@
+Things To-Do:
+
+[ ] - Player spritesheet
+[ ] - Tileset
+[ ] - Map layout
+[ ] - Easter egg
+[ ] - Enemy spritesheet
+[ ] - Misc. entities spritesheet
+[ ] - SFX
+[ ] - Music
+[ ] - Rocket
+[ ] - Enemy behaviour
+[ ] - Item sprites
+[ ] - UI
+[ ] - Story
+[x] - Tiled implementation of entities
+[ ] - Draw order
+[ ] - 
+[ ] - 
+[ ] - 

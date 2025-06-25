@@ -7,36 +7,42 @@ local player
 local entities = {}
 local items = {}
 local grinder
-
-sti = require("libs.sti")
-gameMap = sti('maps/testMap.lua')
-camera = require("libs.camera")
-cam = camera()
-wf = require('libs.windfield')
-world = wf.newWorld(0,0)
-
 local walls = {}
 
+sti = require("libs.sti")
+camera = require("libs.camera")
+wf = require('libs.windfield')
+
+gameMap = sti('maps/testMap.lua')
+cam = camera()
+world = wf.newWorld(0,0) --no gravity
+
 function love.load()
+    math.randomseed(os.time())
     love.window.setTitle("Project Oil")
     love.window.setMode(800,600)
 
     player = Player.new(400,300,world)
     grinder = Grinder.new(600,400)
-    
 
-    for _ = 1, 10 do
-        local x = math.random(100, 700)
-        local y = math.random(100, 500)
-        table.insert(entities, Entity.new(x, y))
-    end
+    if gameMap.layers["Objects"] then
+        for _,obj in ipairs(gameMap.layers["Objects"].objects) do
+            if obj.gid then
+                local x,y = obj.x,obj.y
+                local tree = Entity.new(x,y,obj.gid,"tree")
+                table.insert(entities,tree)
 
-    if gameMap.layers["Walls"] then
-        for i,o in ipairs(gameMap.layers["Walls"].objects) do
-            local wall = world:newRectangleCollider(o.x,o.y,o.width,o.height)
-            wall:setType('static')
-            table.insert(walls, wall)
+                local cx = x
+                local cy = y + obj.height - 32
+                local collider = world:newRectangleCollider(cx,cy,32,32)
+                collider:setType("static")
+                tree.collider = collider
+            end
         end
+    end
+    print("Loaded GIDs:")
+    for gid, tile in pairs(gameMap.tiles) do
+        print("GID:", gid, tile.image and "Has image" or "No image")
     end
 
 end
@@ -48,13 +54,16 @@ function love.update(dt)
 
     world:update(dt)
 
-    local cx, cy = player.collider:getPosition()
+    --we basically move the collider and set the the player pos accordingly
+    local cx, cy = player.collider:getPosition() 
     player.x = cx - player.w / 2
     player.y = cy - player.h / 2
 
     cam:lookAt(player.x,player.y)
     local w = love.graphics.getWidth()
     local h = love.graphics.getHeight()
+
+    --cam bounds check
 
     if cam.x < w/2 then
         cam.x = w/2
@@ -73,12 +82,18 @@ function love.update(dt)
     if cam.y > (mapH - h/2) then
         cam.y = (mapH - h/2)
     end
+
+    for i = #entities, 1, -1 do
+        if entities[i].harvested then
+            table.remove(entities, i)
+        end
+    end
+
 end
 
 function love.draw()
     cam:attach()
         gameMap:drawLayer(gameMap.layers["Ground"])
-        gameMap:drawLayer(gameMap.layers["Trees"])
         player:draw()
 
         for _,e in ipairs(entities) do

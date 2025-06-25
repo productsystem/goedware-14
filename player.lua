@@ -11,13 +11,14 @@ function Player.new(x,y,world)
     self.w,self.h = 20,20
     self.speed = 200
     self.oil = 0
-    self.attackRadius = 40
+    self.attackRadius = 100
     self.angle = 0
     self.swingTimer = 0
     self.swingDuration = 0.2
     local cx = x + self.w / 2
     local cy = y + self.h / 2
     self.collider = world:newBSGRectangleCollider(cx, cy, self.w, self.h, 5)
+    self.collider:setFixedRotation(true)
     self.holdingItem = nil
     return self
 end
@@ -82,6 +83,10 @@ function Player:attemptSlash(entities,items)
 
                 if diff < math.rad(30) then
                     e.harvested = true
+                    if e.collider then
+                        e.collider:destroy()
+                        e.collider = nil
+                    end
                     -- self.oil = self.oil + 1
                     local item = Item.new(e.x + e.w/2,e.y + e.h/2)
                     table.insert(items,item)
