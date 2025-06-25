@@ -4,13 +4,20 @@ Grinder.__index = Grinder
 function Grinder.new(x,y, radius)
     local self = setmetatable({}, Grinder)
     self.x,self.y = x,y
-    self.w,self.h = 20,20
+    self.w,self.h = 32,32
     self.radius = radius or 100
     self.oilProduced = 0
+
+    self.collider = world:newRectangleCollider(x,y,self.w,self.h)
+    self.collider:setType("static")
+    self.collider:setFixedRotation(true)
     return self
 end
 
 function Grinder:update(dt,items,player)
+    local cx, cy = self.collider:getPosition()
+    self.x = cx - self.w / 2
+    self.y = cy - self.h / 2
     for _,item in ipairs(items) do
         if not item.picked and not item.consumed then
             local ix, iy = item.x + item.w/2, item.y + item.h/2
