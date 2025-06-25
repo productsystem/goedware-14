@@ -14,7 +14,7 @@ Things To-Do:
 [ ] - UI
 [ ] - Story
 [x] - Tiled implementation of entities
-[ ] - Draw order
+[x] - Draw order
 [ ] - 
 [ ] - 
 [ ] - 

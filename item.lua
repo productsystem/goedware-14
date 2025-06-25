@@ -17,4 +17,8 @@ function Item:draw()
     love.graphics.rectangle("fill",self.x,self.y,self.w,self.h)
 end
 
+function Item:getYDraw()
+    return self.y + self.h
+end
+
 return Item

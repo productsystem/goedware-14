@@ -93,18 +93,27 @@ end
 
 function love.draw()
     cam:attach()
+        local drawables ={}
+
         gameMap:drawLayer(gameMap.layers["Ground"])
-        player:draw()
-
-        for _,e in ipairs(entities) do
-            e:draw()
+        table.insert(drawables,player)
+        for _, e in ipairs(entities) do
+            table.insert(drawables, e)
         end
 
-        for _,i in ipairs(items) do
-            i:draw()
+        for _, i in ipairs(items) do
+            table.insert(drawables, i)
         end
 
-        grinder:draw()
+        table.insert(drawables, grinder)
+
+        table.sort(drawables,function (a,b)
+            return a:getYDraw() < b:getYDraw()
+        end)
+
+        for _, obj in ipairs(drawables) do
+            obj:draw()
+        end
         world:draw()
     cam:detach()
     love.graphics.setColor(1,1,1,1)
@@ -117,5 +126,4 @@ end
 function love.keypressed(key)
     if not love.keyboard.wasPressed then love.keyboard.wasPressed = {} end
     love.keyboard.wasPressed[key] = true
-    
 end

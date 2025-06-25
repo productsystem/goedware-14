@@ -153,4 +153,8 @@ function Player:draw()
     end
 end
 
+function Player:getYDraw()
+    return self.y + self.h
+end
+
 return Player

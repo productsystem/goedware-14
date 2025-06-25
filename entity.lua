@@ -53,4 +53,8 @@ function Entity:draw()
     end
 end
 
+function Entity:getYDraw()
+    return self.y + self.h
+end
+
 return Entity
