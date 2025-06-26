@@ -21,7 +21,7 @@ function Player.new(x,y,world)
     self.x,self.y = x,y
     self.w,self.h = 32,32
     self.speed = 200
-    self.oil = 0
+    self.oil = 10
     self.attackRadius = 100
     self.angle = 0
     self.swingTimer = 0
@@ -30,8 +30,13 @@ function Player.new(x,y,world)
     local cy = y + self.h / 2
     self.collider = world:newBSGRectangleCollider(cx, cy, self.w, self.h, 5)
     self.collider:setFixedRotation(true)
+    self.collider:getBody():setUserData(self)
+    self.tag = "Player"
     self.holdingItem = nil
     self.hitEntities = {}
+    self.invincible = false
+    self.invincibilityTimer = 0
+    self.invincibilityDuration = 1
     return self
 end
 
@@ -51,6 +56,22 @@ function Player:update(dt,entities,items, cam,enemies)
     if love.keyboard.wasPressed and love.keyboard.wasPressed["e"] then
         self:pickupAndDrop(items)
     end
+
+    if self.invincible then
+        self.invincibilityTimer = self.invincibilityTimer -dt
+        if self.invincibilityTimer <= 0 then
+            self.invincible = false
+        end
+    end
+end
+
+function Player:takeDamage(amt)
+    if not self.invincible and self.oil > 0 then
+        self.oil = self.oil - amt
+        self.invincible = true
+        self.invincibilityTimer = self.invincibilityDuration
+    end
+    
 end
 
 function Player:pickupAndDrop(items)
@@ -127,6 +148,10 @@ function Player:attemptSlash(entities,items,enemies)
                 self.hitEntities[enemy] = true
             end
         end
+
+        -- if dist < 34 then
+        --     self:takeDamage(1)
+        -- end
     end
 end
 
@@ -168,7 +193,11 @@ function Player:canAttack()
 end
 
 function Player:draw()
-    love.graphics.setColor(1,1,0,1)
+    if self.invincible then
+        love.graphics.setColor(1, 1, 1, 0.3)
+    else
+        love.graphics.setColor(1, 1, 0, 1)
+    end
     love.graphics.rectangle("fill", self.x, self.y, self.w, self.h)
     if self.swingTimer > 0 then
         local alpha = self.swingTimer / self.swingDuration

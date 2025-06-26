@@ -12,8 +12,10 @@ function Enemy.new(x,y,world)
     self.leaveRadius = 200
     self.active = false
 
-    self.collider = world:newRectangleCollider(x,y,self.w,self.h)
+    self.collider = world:newRectangleCollider(x, y, self.w, self.h)
     self.collider:setFixedRotation(true)
+    self.collider:getBody():setUserData(self)
+    self.tag = "Enemy"
     return self
 end
 

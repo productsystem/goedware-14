@@ -18,6 +18,25 @@ wf = require('libs.windfield')
 gameMap = sti('maps/testMap.lua')
 cam = camera()
 world = wf.newWorld(0,0) --no gravity
+world:addCollisionClass("Player")
+world:addCollisionClass("Enemy")
+
+world:setCallbacks(
+    function(fixtureA, fixtureB, coll)
+        local bodyA = fixtureA:getBody()
+        local bodyB = fixtureB:getBody()
+        local objA = bodyA:getUserData()
+        local objB = bodyB:getUserData()
+
+        if not objA or not objB then return end
+
+        if objA.tag == "Player" and objB.tag == "Enemy" then
+            objA:takeDamage(1)
+        elseif objA.tag == "Enemy" and objB.tag == "Player" then
+            objB:takeDamage(1)
+        end
+    end
+)
 
 function love.load()
     math.randomseed(os.time())
