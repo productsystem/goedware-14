@@ -42,10 +42,12 @@ function love.load()
             end
         end
     end
-    for i = 1, 3 do
-        local ex = math.random(100, 700)
-        local ey = math.random(100, 500)
-        table.insert(enemies, Enemy.new(ex, ey, world))
+    if gameMap.layers["Entities"] then
+        for _,obj in ipairs(gameMap.layers["Entities"].objects) do
+            if obj.type == "Enemy" then
+                table.insert(enemies,Enemy.new(obj.x,obj.y,world))
+            end
+        end
     end
 end
 

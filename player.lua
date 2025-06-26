@@ -19,7 +19,7 @@ function Player.new(x,y,world)
     --lookup meta data from the table
     local self = setmetatable({}, Player)
     self.x,self.y = x,y
-    self.w,self.h = 20,20
+    self.w,self.h = 32,32
     self.speed = 200
     self.oil = 0
     self.attackRadius = 100
