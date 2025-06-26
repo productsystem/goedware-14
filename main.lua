@@ -45,7 +45,7 @@ function love.load()
     math.randomseed(os.time())
     love.window.setTitle("Project Oil")
     love.window.setMode(640,480)
-    cam:zoomTo(1)
+    cam:zoomTo(3)
 
     player = Player.new(400,300,world)
     grinder = Grinder.new(600,400)
