@@ -8,7 +8,7 @@ Things To-Do:
 [ ] - Misc. entities spritesheet
 [ ] - SFX
 [ ] - Music
-[ ] - Rocket
+[x] - Rocket
 [x] - Enemy behaviour
 [ ] - Item sprites
 [ ] - UI

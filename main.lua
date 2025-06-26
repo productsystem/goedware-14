@@ -21,6 +21,7 @@ cam = camera()
 world = wf.newWorld(0,0) --no gravity
 world:addCollisionClass("Player")
 world:addCollisionClass("Enemy")
+world:addCollisionClass("Rocket")
 
 world:setCallbacks(
     function(fixtureA, fixtureB, coll)
@@ -40,13 +41,15 @@ world:setCallbacks(
 )
 
 function love.load()
+    love.graphics.setDefaultFilter("nearest", "nearest")
     math.randomseed(os.time())
     love.window.setTitle("Project Oil")
-    love.window.setMode(800,600)
+    love.window.setMode(640,480)
+    cam:zoomTo(1)
 
     player = Player.new(400,300,world)
     grinder = Grinder.new(600,400)
-    rocket = Rocket.new(700,300,50)
+    rocket = Rocket.new(700,300,50, world)
 
     if gameMap.layers["Objects"] then
         for _,obj in ipairs(gameMap.layers["Objects"].objects) do
