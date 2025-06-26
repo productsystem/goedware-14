@@ -15,6 +15,6 @@ Things To-Do:
 [ ] - Story
 [x] - Tiled implementation of entities
 [x] - Draw order
-[ ] - Player Health
+[x] - Player Health
 [x] - Item type + oil weightage
 [ ] - 

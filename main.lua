@@ -3,6 +3,7 @@ local Entity = require("entity")
 local Item = require("item")
 local Grinder = require("grinder")
 local Enemy = require("enemy")
+local Rocket = require("rocket")
 
 local player
 local entities = {}
@@ -45,6 +46,7 @@ function love.load()
 
     player = Player.new(400,300,world)
     grinder = Grinder.new(600,400)
+    rocket = Rocket.new(700,300,50)
 
     if gameMap.layers["Objects"] then
         for _,obj in ipairs(gameMap.layers["Objects"].objects) do
@@ -73,6 +75,7 @@ end
 function love.update(dt)
     player:update(dt,entities,items,cam,enemies)
     grinder:update(dt,items,player)
+    rocket:update(dt,player)
     love.keyboard.wasPressed = {}
 
     world:update(dt)
@@ -144,6 +147,7 @@ function love.draw()
         end
 
         table.insert(drawables, grinder)
+        table.insert(drawables,rocket)
 
         table.sort(drawables,function (a,b)
             return a:getYDraw() < b:getYDraw()
