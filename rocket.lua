@@ -8,19 +8,32 @@ function Rocket.new(x,y,maxOil)
     self.maxOil = maxOil or 50
     self.currOil = 0
     self.finished = false
+    self.siphonTimer = 0
+    self.siphonBuffer = 0
     return self
 end
 
 function Rocket:update(dt,player)
-    if not self.finished and player.holdingItem and love.keyboard.wasPressed and love.keyboard.wasPressed["r"] then
-        local item = player.holdingItem
-        if item and item.oilValue then
-            self.currOil = self.currOil + item.oilValue
-            player.holdingItem = nil
-            if self.currOil >= self.maxOil then
+    if self.finished then return end
+    if player.oil > 1 and love.keyboard.isDown("r") then
+        self.siphonTimer = self.siphonTimer + dt
+        local rate = math.min(1 + self.siphonTimer * 2,10)
+        self.siphonBuffer = self.siphonBuffer + rate*dt
+        if self.siphonBuffer >0 then
+            local amount = math.floor(self.siphonBuffer)
+            local transfer = math.min(amount,player.oil,self.maxOil-self.currOil)
+            player.oil = player.oil - transfer
+            self.currOil = self.currOil + transfer
+            self.siphonBuffer = self.siphonBuffer - transfer
+
+            if self.currOil >=self.maxOil then
+                self.currOil = self.maxOil
                 self.finished = true
             end
         end
+    else
+        self.siphonTimer = 0
+        self.siphonBuffer = 0
     end
 end
 function Rocket:draw()

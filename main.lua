@@ -158,11 +158,11 @@ function love.draw()
         end
         world:draw()
     cam:detach()
-    love.graphics.setColor(1,1,1,1)
+    love.graphics.setColor(0,0,0,1)
     love.graphics.print("Oil : " .. tostring(player.oil), 10,10)
     love.graphics.print("Player: " .. math.floor(player.x) .. ", " .. math.floor(player.y), 10, 30)
     love.graphics.print(_VERSION, 10, 50)
-
+    love.graphics.setColor(1,1,1,1)
 end
 
 function love.keypressed(key)
