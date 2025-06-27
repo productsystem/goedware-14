@@ -44,8 +44,8 @@ function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest")
     math.randomseed(os.time())
     love.window.setTitle("Project Oil")
-    love.window.setMode(640,480)
-    cam:zoomTo(3)
+    love.window.setMode(1280,720)
+    cam:zoomTo(5)
 
     player = Player.new(400,300,world)
     grinder = Grinder.new(600,400)
@@ -59,8 +59,8 @@ function love.load()
                 table.insert(entities,tree)
 
                 local cx = x
-                local cy = y + obj.height - 32
-                local collider = world:newRectangleCollider(cx,cy,32,32)
+                local cy = y + obj.height - 16
+                local collider = world:newRectangleCollider(cx,cy,32,16)
                 collider:setType("static")
                 tree.collider = collider
             end

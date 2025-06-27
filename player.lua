@@ -210,8 +210,10 @@ function Player:draw()
     end
 
     if self.holdingItem then
-        love.graphics.setColor(getItemColor(self.holdingItem.itemType))
-        love.graphics.rectangle("fill", self.x + self.w / 2 - 5, self.y - 15, 10, 10)
+        love.graphics.setColor(1,1,1,1)
+        local drawX = self.x + self.w / 2 - (self.holdingItem.image:getWidth()/ 2)
+        local drawY = self.y - self.holdingItem.image:getHeight() - 5
+        love.graphics.draw(self.holdingItem.image, drawX, drawY)
     end
 end
 

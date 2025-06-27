@@ -4,7 +4,7 @@ Enemy.__index = Enemy
 function Enemy.new(x,y,world)
     local self = setmetatable({},Enemy)
     self.x,self.y = x,y
-    self.w,self.h = 32,32
+    self.w,self.h = 64,64
     self.startX,self.startY = x,y
     self.speed = 100
     self.health = 3
@@ -16,6 +16,7 @@ function Enemy.new(x,y,world)
     self.collider:setFixedRotation(true)
     self.collider:getBody():setUserData(self)
     self.tag = "Enemy"
+    self.image = love.graphics.newImage("sprites/crab.png")
     return self
 end
 
@@ -44,9 +45,8 @@ function Enemy:update(dt,player)
 end
 
 function Enemy:draw()
-    love.graphics.setColor(1,0.3,0.3)
-    love.graphics.rectangle("fill",self.x,self.y,self.w,self.h)
-    
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.draw(self.image, self.x, self.y)
 end
 
 function Enemy:getYDraw()
