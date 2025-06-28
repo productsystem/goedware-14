@@ -19,14 +19,15 @@ function Grinder:update(dt,items,player)
     local cx, cy = self.collider:getPosition()
     self.x = cx - self.w / 2
     self.y = cy - self.h / 2
-    for _,item in ipairs(items) do
+    for i = #items, 1, -1 do
+        local item = items[i]
         if not item.picked and not item.consumed then
             local ix, iy = item.x + item.w/2, item.y + item.h/2
-            local d = math.sqrt((self.x - ix)^2 + (self.y -iy)^2)
-            if d<self.radius then
-                item.consumed = true
+            local d = math.sqrt((self.x - ix)^2 + (self.y - iy)^2)
+            if d < self.radius then
                 player.oil = player.oil + item.oilValue
                 self.oilProduced = self.oilProduced + item.oilValue
+                table.remove(items, i)
             end
         end
     end
