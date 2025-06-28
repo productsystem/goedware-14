@@ -15,6 +15,7 @@ local enemies = {}
 sti = require("libs.sti")
 camera = require("libs.camera")
 wf = require('libs.windfield')
+anim8 = require('libs.anim8')
 
 gameMap = sti('maps/testMap.lua')
 cam = camera()
@@ -45,7 +46,7 @@ function love.load()
     math.randomseed(os.time())
     love.window.setTitle("Project Oil")
     love.window.setMode(1280,720)
-    cam:zoomTo(5)
+    cam:zoomTo(2)
 
     player = Player.new(400,300,world)
     grinder = Grinder.new(600,400)
@@ -86,7 +87,8 @@ function love.update(dt)
     --we basically move the collider and set the the player pos accordingly
     local cx, cy = player.collider:getPosition() 
     player.x = cx - player.w / 2
-    player.y = cy - player.h / 2
+    player.y = cy - 48
+
 
     cam:lookAt(player.x,player.y)
     local w = love.graphics.getWidth()

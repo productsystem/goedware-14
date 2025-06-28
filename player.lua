@@ -4,33 +4,24 @@ local Item = require("item")
 --simulates OOP
 Player.__index = Player
 
-local function getItemColor(itemType)
-    if itemType == "tree" then
-        return 0.6, 0.4, 0.2
-    elseif itemType == "enemy" then
-        return 1, 0.3, 0.3
-    else
-        return 1, 1, 0.2
-    end
-end
-
-
 function Player.new(x,y,world)
     --lookup meta data from the table
     local self = setmetatable({}, Player)
     self.x,self.y = x,y
-    self.w,self.h = 32,32
+    self.w,self.h = 32,64
     self.speed = 200
     self.oil = 10
     self.attackRadius = 100
     self.angle = 0
     self.swingTimer = 0
     self.swingDuration = 0.2
+    local colliderW, colliderH = 32, 32
     local cx = x + self.w / 2
-    local cy = y + self.h / 2
-    self.collider = world:newBSGRectangleCollider(cx, cy, self.w, self.h, 5)
+    local cy = y + self.h - colliderH/2
+    self.collider = world:newBSGRectangleCollider(cx, cy, colliderW, colliderH, 5)
     self.collider:setFixedRotation(true)
     self.collider:getBody():setUserData(self)
+    self.image = love.graphics.newImage("sprites/player.png")
     self.tag = "Player"
     self.holdingItem = nil
     self.hitEntities = {}
@@ -158,7 +149,7 @@ end
 function Player:handleMovement(dt,cam)
     local cx, cy = self.collider:getPosition()
     self.x = cx - self.w / 2
-    self.y = cy - self.h / 2
+    self.y = cy - self.h + 16
 
     local dx,dy =0,0
     if love.keyboard.isDown("w") then
@@ -196,9 +187,9 @@ function Player:draw()
     if self.invincible then
         love.graphics.setColor(1, 1, 1, 0.3)
     else
-        love.graphics.setColor(1, 1, 0, 1)
+        love.graphics.setColor(1, 1, 1, 1)
     end
-    love.graphics.rectangle("fill", self.x, self.y, self.w, self.h)
+    love.graphics.draw(self.image,self.x,self.y)
     if self.swingTimer > 0 then
         local alpha = self.swingTimer / self.swingDuration
         love.graphics.setColor(1, 0.5, 0, alpha)

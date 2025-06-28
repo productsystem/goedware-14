@@ -1,6 +1,8 @@
 local Enemy = {}
 Enemy.__index = Enemy
 
+local anim8 = require("libs.anim8")
+
 function Enemy.new(x,y,world)
     local self = setmetatable({},Enemy)
     self.x,self.y = x,y
@@ -17,6 +19,12 @@ function Enemy.new(x,y,world)
     self.collider:getBody():setUserData(self)
     self.tag = "Enemy"
     self.image = love.graphics.newImage("sprites/crab.png")
+    local g = anim8.newGrid(64,64,self.image:getWidth(),self.image:getHeight())
+    self.animations = {
+        idle=anim8.newAnimation(g('1-1',1),1),
+        walk = anim8.newAnimation(g('1-4',1),0.1),
+    }
+    self.currentAnim = self.animations.idle
     return self
 end
 
@@ -42,11 +50,19 @@ function Enemy:update(dt,player)
     local cx,cy = self.collider:getPosition()
     self.x = cx-self.w/2
     self.y = cy-self.h/2
+
+    if self.active then
+        self.currentAnim = self.animations.walk
+    else
+        self.currentAnim = self.animations.idle
+    end
+
+    self.currentAnim:update(dt)
 end
 
 function Enemy:draw()
     love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.draw(self.image, self.x, self.y)
+    self.currentAnim:draw(self.image, self.x, self.y)
 end
 
 function Enemy:getYDraw()
