@@ -48,10 +48,6 @@ function love.load()
     love.window.setMode(1280,720)
     cam:zoomTo(2)
 
-    player = Player.new(400,300,world)
-    grinder = Grinder.new(600,400)
-    rocket = Rocket.new(700,300,50, world)
-
     if gameMap.layers["Objects"] then
         for _,obj in ipairs(gameMap.layers["Objects"].objects) do
             if obj.gid then
@@ -71,6 +67,15 @@ function love.load()
         for _,obj in ipairs(gameMap.layers["Entities"].objects) do
             if obj.type == "Enemy" then
                 table.insert(enemies,Enemy.new(obj.x,obj.y,world))
+            end
+            if obj.type == "Player" then
+                player = Player.new(obj.x,obj.y,world)
+            end
+            if obj.type == "Grinder" then
+                grinder = Grinder.new(obj.x,obj.y)
+            end
+            if obj.type == "Rocket" then
+                rocket = Rocket.new(obj.x,obj.y,50,world)
             end
         end
     end
