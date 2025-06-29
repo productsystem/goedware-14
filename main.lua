@@ -41,6 +41,22 @@ world:setCallbacks(
     end
 )
 
+local function getResourceTypeFromGID(gid)
+    for _, tileset in ipairs(gameMap.tilesets) do
+        local firstgid = tileset.firstgid
+        local tileid = gid - firstgid
+        for _, tile in ipairs(tileset.tiles) do
+            if tile.id == tileid then
+                if tile.properties and tile.properties["resourceType"] then
+                    return tile.properties["resourceType"]
+                end
+            end
+        end
+    end
+    return nil
+end
+
+
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest")
     math.randomseed(os.time())
@@ -51,15 +67,10 @@ function love.load()
     if gameMap.layers["Objects"] then
         for _,obj in ipairs(gameMap.layers["Objects"].objects) do
             if obj.gid then
-                local x,y = obj.x,obj.y
-                local tree = Entity.new(x,y,obj.gid,"tree")
-                table.insert(entities,tree)
-
-                local cx = x
-                local cy = y + obj.height - 16
-                local collider = world:newRectangleCollider(cx,cy,32,16)
-                collider:setType("static")
-                tree.collider = collider
+                local x, y = obj.x, obj.y
+                local resourceType = getResourceTypeFromGID(obj.gid)
+                local entity = Entity.new(x, y, obj.gid, resourceType,world)
+                table.insert(entities, entity)
             end
         end
     end

@@ -22,7 +22,7 @@ local function getTileImageFromGID(gid)
     return nil
 end
 
-function Entity.new(x,y,gid,resourceType)
+function Entity.new(x,y,gid,resourceType,world)
     local self = setmetatable({}, Entity)
     self.x,self.y = x,y
     self.gid = gid
@@ -36,6 +36,19 @@ function Entity.new(x,y,gid,resourceType)
         self.w, self.h = 32, 64
     end
     self.harvested = false
+    if self.type == "tree" then
+        local cx = x
+        local cy = y + self.h - 16
+        self.collider = world:newRectangleCollider(cx, cy, 32, 16)
+        self.collider:setType("static")
+    elseif self.type == "rock" then
+        local cx = x
+        local cy = y
+        self.collider = world:newRectangleCollider(cx, cy, 32, 32)
+        self.collider:setType("static")
+    elseif self.type == "flower" then
+        self.collider = nil
+    end
     return self
 end
 
