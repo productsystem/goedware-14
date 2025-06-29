@@ -10,4 +10,4 @@ Things To-Do:
 [ ] - Story/Tutorial
 [ ] - Orbit Story
 [ ] - Credits
-[ ] - Walls around the edges
+[x] - Walls around the edges

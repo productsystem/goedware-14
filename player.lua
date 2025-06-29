@@ -23,7 +23,26 @@ function Player.new(x,y,world)
     self.collider = world:newBSGRectangleCollider(cx, cy, colliderW, colliderH, 5)
     self.collider:setFixedRotation(true)
     self.collider:getBody():setUserData(self)
-    self.image = love.graphics.newImage("sprites/player.png")
+    self.image = love.graphics.newImage("sprites/player_anim.png")
+    local g = anim8.newGrid(32, 64, self.image:getWidth(), self.image:getHeight())
+    self.animations = {
+        down = {
+            idle = anim8.newAnimation(g('1-1',1), 0.5),
+            walk = anim8.newAnimation(g('1-2',1), 0.2)
+        },
+        right = {
+            idle = anim8.newAnimation(g('3-3',1), 0.5),
+            walk = anim8.newAnimation(g('3-4',1), 0.2)
+        },
+        up = {
+            idle = anim8.newAnimation(g('5-5',1), 0.5),
+            walk = anim8.newAnimation(g('5-6',1), 0.2)
+        }
+    }
+    self.currentDir = "down"
+    self.moving = false
+    self.facingLeft = false
+    self.currentAnim = self.animations.down.idle
     self.tag = "Player"
     self.holdingItem = nil
     self.hitEntities = {}
@@ -58,6 +77,14 @@ function Player:update(dt,entities,items, cam,enemies)
             self.invincible = false
         end
     end
+    if self.moving then
+        self.currentAnim = self.animations[self.currentDir].walk
+    else
+        self.currentAnim = self.animations[self.currentDir].idle
+    end
+
+    self.currentAnim:update(dt)
+
 end
 
 function Player:takeDamage(amt)
@@ -168,6 +195,8 @@ function Player:handleMovement(dt,cam)
         dx = dx+1
     end
 
+    
+
     local len = math.sqrt(dx*dx + dy*dy)
     if len>0 then
         -- self.x = self.x + (dx/len) * self.speed * dt
@@ -176,6 +205,20 @@ function Player:handleMovement(dt,cam)
     else
         self.collider:setLinearVelocity(0,0)
     end
+    self.moving = len > 0
+    if self.moving then
+        if math.abs(dx) > math.abs(dy) then
+            self.currentDir = "right"
+            self.facingLeft = dx < 0
+        elseif dy < 0 then
+            self.currentDir = "up"
+            self.facingLeft = false
+        else
+            self.currentDir = "down"
+            self.facingLeft = false
+        end
+    end
+
 
     local mx,my = cam:worldCoords(love.mouse.getPosition())
     local px,py = self.x + self.w/2, self.y + self.h/2
@@ -193,7 +236,9 @@ function Player:draw()
     else
         love.graphics.setColor(1, 1, 1, 1)
     end
-    love.graphics.draw(self.image,self.x,self.y)
+    local scaleX = self.facingLeft and -1 or 1
+    local offsetX = self.facingLeft and self.w or 0
+    self.currentAnim:draw(self.image, self.x + offsetX, self.y, 0, scaleX, 1)
     if self.swingTimer > 0 then
         local alpha = self.swingTimer / self.swingDuration
         local px = self.x + self.w / 2
