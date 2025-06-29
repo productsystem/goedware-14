@@ -23,6 +23,8 @@ function Item.new(x,y,type)
         self.image = love.graphics.newImage("sprites/rock_item.png")
     elseif(self.itemType == "flower") then
         self.image = love.graphics.newImage("sprites/flower_item.png")
+    elseif(self.itemType == "orb") then
+        self.image = love.graphics.newImage("sprites/orb_item.png")
     end
     return self
 end

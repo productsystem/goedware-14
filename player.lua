@@ -4,6 +4,8 @@ local Item = require("item")
 --simulates OOP
 Player.__index = Player
 
+hitSound = love.audio.newSource("sounds/player_damage.wav", "static")
+
 function Player.new(x,y,world)
     --lookup meta data from the table
     local self = setmetatable({}, Player)
@@ -61,6 +63,7 @@ function Player:takeDamage(amt)
         self.oil = self.oil - amt
         self.invincible = true
         self.invincibilityTimer = self.invincibilityDuration
+        hitSound:play()
     end
     
 end
@@ -107,15 +110,12 @@ function Player:attemptSlash(entities,items,enemies)
                 end
 
                 if diff < math.rad(30) then
-                    e.harvested = true
-                    if e.collider then
-                        e.collider:destroy()
-                        e.collider = nil
-                    end
+                    e:hit()
                     self.hitEntities[e] = true
-                    -- self.oil = self.oil + 1
-                    local item = Item.new(e.x + e.w/2,e.y + e.h/2,e.type)
-                    table.insert(items,item)
+                    if e.harvested then
+                        local item = Item.new(e.x + e.w / 2, e.y + e.h / 2, e.type)
+                        table.insert(items, item)
+                    end
                 end
             end
         end
@@ -192,12 +192,18 @@ function Player:draw()
     love.graphics.draw(self.image,self.x,self.y)
     if self.swingTimer > 0 then
         local alpha = self.swingTimer / self.swingDuration
-        love.graphics.setColor(1, 0.5, 0, alpha)
         local px = self.x + self.w / 2
         local py = self.y + self.h / 2
-        local offsetX = math.cos(self.angle) * 20
-        local offsetY = math.sin(self.angle) * 20
-        love.graphics.rectangle("fill", px + offsetX, py + offsetY, 10, 10)
+        local r = 40
+        local segments = 20
+        local arcAngle = math.rad(60)
+        local startAngle = self.angle - arcAngle / 2
+        local endAngle = self.angle + arcAngle / 2
+
+        love.graphics.setColor(1, 0.5, 0, alpha)
+        love.graphics.setLineWidth(8)
+        love.graphics.arc("line", "open", px, py, r, startAngle, endAngle, segments)
+        love.graphics.setLineWidth(1)
     end
 
     if self.holdingItem then

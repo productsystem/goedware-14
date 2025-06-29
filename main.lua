@@ -17,7 +17,7 @@ camera = require("libs.camera")
 wf = require('libs.windfield')
 anim8 = require('libs.anim8')
 
-gameMap = sti('maps/testMap.lua')
+gameMap = sti('maps/playMap.lua')
 cam = camera()
 world = wf.newWorld(0,0) --no gravity
 world:addCollisionClass("Player")
@@ -56,21 +56,37 @@ local function getResourceTypeFromGID(gid)
     return nil
 end
 
+local secretZone = {}
+local secretFlowers = {}
+local orbSpawned = false
 
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest")
     math.randomseed(os.time())
     love.window.setTitle("Project Oil")
     love.window.setMode(1280,720)
-    cam:zoomTo(2)
+    cam:zoomTo(1)
 
     if gameMap.layers["Objects"] then
         for _,obj in ipairs(gameMap.layers["Objects"].objects) do
             if obj.gid then
-                local x, y = obj.x, obj.y
+                local heightOffset = 0
+                for _, tileset in ipairs(gameMap.tilesets) do
+                    local firstgid = tileset.firstgid
+                    local tileid = obj.gid - firstgid
+                    for _, tile in ipairs(tileset.tiles) do
+                        if tile.id == tileid then
+                            heightOffset = tile.height or gameMap.tileheight
+                        end
+                    end
+                end
+                local x, y = obj.x, obj.y - heightOffset
                 local resourceType = getResourceTypeFromGID(obj.gid)
                 local entity = Entity.new(x, y, obj.gid, resourceType,world)
                 table.insert(entities, entity)
+                if(obj.name == "flower_secret") then
+                    table.insert(secretFlowers,entity)
+                end
             end
         end
     end
@@ -90,6 +106,18 @@ function love.load()
             end
         end
     end
+    if gameMap.layers["Secret"] then
+        for _,obj in ipairs(gameMap.layers["Secret"].objects) do
+            if obj.name == "secret_zone" then
+                secretZone = {
+                    x = obj.x,
+                    y = obj.y,
+                    w= obj.width,
+                    h = obj.height,
+                }
+            end
+        end
+    end
 end
 
 function love.update(dt)
@@ -105,6 +133,9 @@ function love.update(dt)
     player.x = cx - player.w / 2
     player.y = cy - 48
 
+    for _, e in ipairs(entities) do
+        e:update(dt)
+    end
 
     cam:lookAt(player.x,player.y)
     local w = love.graphics.getWidth()
@@ -145,6 +176,31 @@ function love.update(dt)
             table.insert(items, item)
             e.collider:destroy()
             table.remove(enemies, i)
+        end
+    end
+
+    if not orbSpawned and secretZone then
+        local allAlive = true
+        for _,flower in ipairs(secretFlowers) do
+            if flower.harvested then
+                allAlive = false
+                break
+            end
+        end
+
+        if allAlive then
+            for _,item in ipairs(items) do
+                if not item.picked and item.itemType == "flower" then
+                    local ix,iy = item.x + item.w/2,item.y + item.h/2
+                    if ix >= secretZone.x and ix <= secretZone.x + secretZone.w and iy >= secretZone.y and iy <= secretZone.y + secretZone.h then
+                        orbSpawned = true
+                        local orb = Item.new(secretZone.x, secretZone.y, "orb")
+                        table.insert(items,orb)
+                        item.picked = true
+                        break
+                    end
+                end
+            end
         end
     end
 end
