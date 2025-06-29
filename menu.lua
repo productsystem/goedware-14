@@ -82,4 +82,19 @@ function Menu.isOpen()
     return currentMenu ~= nil
 end
 
+function Menu.showGameOver()
+    currentMenu = "gameover"
+    title = "Mission Complete"
+    backgroundColor = {0, 0, 0, 0.8}
+    buttons = {
+        { label = "Exit to Menu", action = function()
+            Menu.load()
+        end },
+        { label = "Quit", action = function()
+            love.event.quit()
+        end }
+    }
+end
+
+
 return Menu

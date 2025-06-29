@@ -4,7 +4,7 @@ local Item = require("item")
 local Grinder = require("grinder")
 local Enemy = require("enemy")
 local Rocket = require("rocket")
-local Menu = require("menu")
+Menu = require("menu")
 
 local player
 local entities = {}
@@ -208,7 +208,7 @@ end
 
 function love.update(dt)
     if Menu.isOpen() then
-        -- Menu.update(dt)
+
     else
         updateGame(dt)
     end

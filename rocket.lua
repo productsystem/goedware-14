@@ -20,6 +20,7 @@ function Rocket.new(x,y,maxOil,world)
     self.boardingEnabled = false
     self.launchTimer = 0
     self.boardingRadius = 100
+    self.markedGameOver = false
     return self
 end
 
@@ -76,6 +77,11 @@ function Rocket:update(dt, player)
             player.boarded = true
             player.collider:setActive(false)
         end
+    end
+
+    if self.launched and self.launchTimer > 3 and not self.markedGameOver then
+        Menu.showGameOver()
+        self.markedGameOver = true
     end
 end
 function Rocket:draw()
