@@ -16,6 +16,7 @@ local secretZone = {}
 local secretFlowers = {}
 local orbSpawned = false
 local gameState = "menu"
+local orbLoc = {}
 
 local oilFont
 
@@ -103,6 +104,8 @@ function initGame()
                 grinder = Grinder.new(obj.x, obj.y)
             elseif obj.type == "Rocket" then
                 rocket = Rocket.new(obj.x, obj.y, 10, world)
+            elseif obj.type == "Orb" then
+                orbLoc = {x=obj.x,y=obj.y}
             end
         end
     end
@@ -166,7 +169,7 @@ function updateGame(dt)
                     if ix >= secretZone.x and ix <= secretZone.x + secretZone.w and
                        iy >= secretZone.y and iy <= secretZone.y + secretZone.h then
                         orbSpawned = true
-                        local orb = Item.new(secretZone.x, secretZone.y, "orb")
+                        local orb = Item.new(orbLoc.x, orbLoc.y, "orb")
                         table.insert(items, orb)
                         item.picked = true
                         break

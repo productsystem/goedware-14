@@ -10,7 +10,7 @@ return {
   tilewidth = 32,
   tileheight = 32,
   nextlayerid = 5,
-  nextobjectid = 223,
+  nextobjectid = 224,
   properties = {},
   tilesets = {
     {
@@ -2698,6 +2698,19 @@ return {
           shape = "point",
           x = 384,
           y = 1824,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 223,
+          name = "",
+          type = "Orb",
+          shape = "point",
+          x = 1632,
+          y = 2080,
           width = 0,
           height = 0,
           rotation = 0,
