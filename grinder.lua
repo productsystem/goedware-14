@@ -11,7 +11,13 @@ function Grinder.new(x,y, radius)
     self.collider = world:newRectangleCollider(x,y,self.w,self.h)
     self.collider:setType("static")
     self.collider:setFixedRotation(true)
-    self.image = love.graphics.newImage("sprites/grinder.png")
+    self.image = love.graphics.newImage("sprites/grinder_anim.png")
+    local g = anim8.newGrid(64, 64, self.image:getWidth(), self.image:getHeight())
+
+    self.animation = anim8.newAnimation(
+        g('1-4',1, '3-2',1),
+        0.1
+    )
     return self
 end
 
@@ -31,11 +37,14 @@ function Grinder:update(dt,items,player)
             end
         end
     end
+    self.animation:update(dt)
 end
 
 function Grinder:draw()
     love.graphics.setColor(1,1,1,1)
-    love.graphics.draw(self.image,self.x,self.y)
+    if self.image then
+        self.animation:draw(self.image, self.x, self.y)
+    end
 end
 
 function Grinder:getYDraw()
