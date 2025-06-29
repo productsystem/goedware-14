@@ -138,7 +138,20 @@ function initGame()
     love.graphics.setDefaultFilter("nearest", "nearest")
     math.randomseed(os.time())
     
-
+    player = nil
+    entities = {}
+    items = {}
+    grinder = nil
+    walls = {}
+    enemies = {}
+    secretZone = {}
+    secretFlowers = {}
+    orbSpawned = false
+    orbLoc = {}
+    gameJustStarted = false
+    gameState = "game"
+    local orbLoc = {}
+    local gameJustStarted = false
     gameMap = sti('maps/playMap.lua')
     cam = camera()
     cam:zoomTo(1)
