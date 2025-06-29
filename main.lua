@@ -5,6 +5,7 @@ local Grinder = require("grinder")
 local Enemy = require("enemy")
 local Rocket = require("rocket")
 Menu = require("menu")
+local Cutscene = require("cutscene")
 
 local player
 local entities = {}
@@ -17,6 +18,7 @@ local secretFlowers = {}
 local orbSpawned = false
 local gameState = "menu"
 local orbLoc = {}
+local gameJustStarted = false
 
 local oilFont
 
@@ -28,6 +30,94 @@ anim8 = require('libs.anim8')
 gameMap = nil
 cam = nil
 world = nil
+
+local orbShineImg = love.graphics.newImage("sprites/orb_shine.png")
+local orbBigImg = love.graphics.newImage("sprites/orb.png")
+
+function lerp(a, b, t)
+    return a + (b - a) * t
+end
+
+function startOrbCutscene(orbPos)
+    local initialZoom = cam.scale
+    local initialX, initialY = cam.x, cam.y
+    local targetZoom = 2.5
+    local targetX, targetY = orbPos.x, orbPos.y
+
+    Cutscene.start({
+        {
+            duration = 0.6,
+            update = function(t)
+                cam:zoomTo(lerp(initialZoom, targetZoom, t))
+                cam:lookAt(lerp(initialX, targetX, t), lerp(initialY, targetY, t))
+            end,
+            draw = function()
+                love.graphics.draw(orbShineImg, orbPos.x - 32, orbPos.y - 32)
+            end
+        },
+        {
+            duration = 0.8,
+            draw = function()
+                love.graphics.draw(orbBigImg, orbPos.x - 16, orbPos.y - 16)
+            end
+        },
+        {
+            duration = 0.5,
+            draw = function()
+                local scale = 1 - Cutscene.timer / 0.5
+                love.graphics.draw(orbBigImg, orbPos.x, orbPos.y, 0, scale, scale, 16, 16)
+            end
+        },
+        {
+            duration = 0.3,
+            action = function()
+                local orb = Item.new(orbPos.x, orbPos.y, "orb")
+                table.insert(items, orb)
+            end
+        },
+        {
+            duration = 0.6,
+            update = function(t)
+                cam:zoomTo(lerp(targetZoom, 1, t))
+                cam:lookAt(lerp(targetX, player.x, t), lerp(targetY, player.y, t))
+            end
+        }
+    })
+end
+
+function startIntroCutscene()
+    local initialZoom = cam.scale
+    local initialX, initialY = player.x, player.y
+    local targetZoom = 2.2
+    local targetX, targetY = rocket.x + rocket.w / 2, rocket.y + rocket.h / 2
+
+    Cutscene.start({
+        {
+            duration = 0.8,
+            update = function(t)
+                cam:zoomTo(lerp(initialZoom, targetZoom, t))
+                cam:lookAt(lerp(initialX, targetX, t), lerp(initialY, targetY, t))
+            end
+        },
+        {
+            duration = 1.5, -- pause on rocket
+        },
+        {
+            duration = 0.8,
+            update = function(t)
+                cam:zoomTo(lerp(targetZoom, 1, t))
+                cam:lookAt(lerp(targetX, player.x, t), lerp(targetY, player.y, t))
+            end
+        },
+        {
+            duration = 0.1,
+            action = function()
+                gameJustStarted = false
+            end
+        }
+    })
+end
+
 
 local function getResourceTypeFromGID(gid)
     for _, tileset in ipairs(gameMap.tilesets) do
@@ -117,9 +207,16 @@ function initGame()
             end
         end
     end
+    gameJustStarted = true
+    startIntroCutscene()
 end
 
 function updateGame(dt)
+    if Cutscene.isActive() or gameJustStarted then
+        Cutscene.update(dt)
+        return
+    end
+
     if not player.boarded then
         player:update(dt, entities, items, cam, enemies)
     end
@@ -169,8 +266,7 @@ function updateGame(dt)
                     if ix >= secretZone.x and ix <= secretZone.x + secretZone.w and
                        iy >= secretZone.y and iy <= secretZone.y + secretZone.h then
                         orbSpawned = true
-                        local orb = Item.new(orbLoc.x, orbLoc.y, "orb")
-                        table.insert(items, orb)
+                        startOrbCutscene(orbLoc)
                         item.picked = true
                         break
                     end
@@ -198,6 +294,7 @@ function drawGame()
 
     for _, obj in ipairs(drawables) do obj:draw() end
     world:draw()
+    Cutscene.draw()
     cam:detach()
 
     drawOilUI()
