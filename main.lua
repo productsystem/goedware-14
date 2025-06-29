@@ -4,6 +4,7 @@ local Item = require("item")
 local Grinder = require("grinder")
 local Enemy = require("enemy")
 local Rocket = require("rocket")
+local Menu = require("menu")
 
 local player
 local entities = {}
@@ -14,6 +15,7 @@ local enemies = {}
 local secretZone = {}
 local secretFlowers = {}
 local orbSpawned = false
+local gameState = "menu"
 
 sti = require("libs.sti")
 camera = require("libs.camera")
@@ -42,8 +44,7 @@ end
 function initGame()
     love.graphics.setDefaultFilter("nearest", "nearest")
     math.randomseed(os.time())
-    love.window.setTitle("Project Oil")
-    love.window.setMode(1280, 720)
+    
 
     gameMap = sti('maps/playMap.lua')
     cam = camera()
@@ -203,18 +204,37 @@ function drawGame()
 end
 
 function love.load()
-    initGame()
+    love.window.setTitle("Project Oil")
+    love.window.setMode(1280, 720)
 end
 
 function love.update(dt)
-    updateGame(dt)
+    if gameState == "game" then
+        updateGame(dt)
+    end
 end
 
 function love.draw()
-    drawGame()
+    if gameState == "menu" then
+        Menu.draw()
+    elseif gameState == "game" then
+        drawGame()
+    end
 end
 
 function love.keypressed(key)
     if not love.keyboard.wasPressed then love.keyboard.wasPressed = {} end
     love.keyboard.wasPressed[key] = true
+end
+
+function love.mousepressed(x, y, button)
+    if gameState == "menu" then
+        local result = Menu.mousepressed(x, y, button)
+        if result == "start" then
+            initGame()
+            gameState = "game"
+        elseif result == "exit" then
+            love.event.quit()
+        end
+    end
 end
