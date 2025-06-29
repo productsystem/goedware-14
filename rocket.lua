@@ -16,11 +16,22 @@ function Rocket.new(x,y,maxOil,world)
     self.collider:setType("static")
     self.collider:setCollisionClass("Rocket")
     self.collider:setUserData(self)
+    self.launched = false
+    self.boardingEnabled = false
+    self.launchTimer = 0
+    self.boardingRadius = 100
     return self
 end
 
 function Rocket:update(dt, player)
-    if self.finished then return end
+    if self.launched then
+        self.launchTimer = self.launchTimer + dt
+        self.y = self.y - 60*dt
+    end
+    if not self.launched and self.currOil >= self.maxOil then
+        self.finished = true
+        self.boardingEnabled = true
+    end
 
     local playerX = player.x + player.w / 2
     local playerY = player.y + player.h / 2
@@ -50,16 +61,37 @@ function Rocket:update(dt, player)
         self.siphonTimer = 0
         self.siphonBuffer = 0
     end
+    if self.boardingEnabled then
+        local px = player.x + player.w / 2
+        local py = player.y + player.h / 2
+        local bx = self.x + self.w / 2
+        local by = self.y + self.h
+
+        local dx = bx - px
+        local dy = by - py
+        local dist = math.sqrt(dx * dx + dy * dy)
+
+        if dist < self.boardingRadius and love.keyboard.wasPressed and love.keyboard.wasPressed["e"] then
+            self.launched = true
+            player.boarded = true
+            player.collider:setActive(false)
+        end
+    end
 end
 function Rocket:draw()
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.draw(self.image, self.x, self.y)
-    love.graphics.setColor(0.2, 0.6, 1)
+    if not self.launched then
+        love.graphics.setColor(0.2, 0.6, 1)
     local barW = self.w
     local fill = (self.currOil / self.maxOil)
     love.graphics.rectangle("fill", self.x, self.y - 10, barW * fill, 5)
     love.graphics.setColor(1, 1, 1)
     love.graphics.print("Oil: " .. tostring(self.currOil) .. "/" .. self.maxOil, self.x, self.y + self.h + 5)
+    else
+        love.graphics.setColor(1, 1, 0)
+        love.graphics.print("Launching...", self.x, self.y + self.h + 5)
+    end
 end
 
 function Rocket:getYDraw()

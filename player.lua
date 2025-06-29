@@ -30,11 +30,13 @@ function Player.new(x,y,world)
     self.invincible = false
     self.invincibilityTimer = 0
     self.invincibilityDuration = 1
+    self.boarded = false
     return self
 end
 
 --Player:update(dt) == Player.update(self,dt)
 function Player:update(dt,entities,items, cam,enemies)
+    if self.boarded or not self.collider then return end
     self:handleMovement(dt,cam)
     if self:canAttack() then
         self.swingTimer = self.swingDuration
@@ -147,6 +149,7 @@ function Player:attemptSlash(entities,items,enemies)
 end
 
 function Player:handleMovement(dt,cam)
+    if not self.collider then return end
     local cx, cy = self.collider:getPosition()
     self.x = cx - self.w / 2
     self.y = cy - self.h + 16
@@ -184,6 +187,7 @@ function Player:canAttack()
 end
 
 function Player:draw()
+    if self.boarded then return end
     if self.invincible then
         love.graphics.setColor(1, 1, 1, 0.3)
     else

@@ -102,7 +102,7 @@ function love.load()
                 grinder = Grinder.new(obj.x,obj.y)
             end
             if obj.type == "Rocket" then
-                rocket = Rocket.new(obj.x,obj.y,50,world)
+                rocket = Rocket.new(obj.x,obj.y,10,world)
             end
         end
     end
@@ -237,8 +237,6 @@ function love.draw()
     cam:detach()
     love.graphics.setColor(0,0,0,1)
     love.graphics.print("Oil : " .. tostring(player.oil), 10,10)
-    -- love.graphics.print("Player: " .. math.floor(player.x) .. ", " .. math.floor(player.y), 10, 30)
-    -- love.graphics.print(_VERSION, 10, 50)
     love.graphics.setColor(1,1,1,1)
 end
 
