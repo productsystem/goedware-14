@@ -2,7 +2,7 @@ Things To-Do:
 
 [ ] - Main menu
 [x] - Player animations
-[ ] - Grinder animations
+[x] - Grinder animations
 [ ] - Music
 [ ] - SFX
 [ ] - Oil values set

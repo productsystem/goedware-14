@@ -2,13 +2,18 @@ local Menu = {}
 
 local currentMenu = nil
 local buttons = {}
-local font = love.graphics.newFont(24)
-local titleFont = love.graphics.newFont(48)
+local font = love.graphics.newFont("fonts/PressStart2P-Regular.ttf", 24)
+local titleFont = love.graphics.newFont("fonts/PressStart2P-Regular.ttf",48)
 
 local title = ""
 local backgroundColor = {0.1, 0.1, 0.1, 0.8}
 
+local planetImage = love.graphics.newImage("sprites/planet.png")
+local playerImage = love.graphics.newImage("sprites/player.png")
+local playerAngle = 0
+
 function Menu.load()
+    love.graphics.setDefaultFilter("nearest", "nearest")
     currentMenu = "main"
     title = "Project Oil"
     backgroundColor = {0.05, 0.05, 0.05, 0.9}
@@ -38,40 +43,94 @@ function Menu.pause()
 end
 
 function Menu.update(dt)
+    if currentMenu == "main" then
+        playerAngle = playerAngle + dt * 0.5
+    end
 end
 
 function Menu.draw()
-    love.graphics.setFont(font)
+    local screenW, screenH = love.graphics.getWidth(), love.graphics.getHeight()
     love.graphics.setColor(backgroundColor)
-    love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
-    love.graphics.setFont(titleFont)
-    love.graphics.setColor(1, 1, 1)
-    local titleW = titleFont:getWidth(title)
-    love.graphics.print(title, love.graphics.getWidth()/2 - titleW/2, 100)
+    love.graphics.rectangle("fill", 0, 0, screenW, screenH)
 
-    love.graphics.setFont(font)
-    for i, btn in ipairs(buttons) do
-        local textW = font:getWidth(btn.label)
-        local textH = font:getHeight()
-        local x = love.graphics.getWidth() / 2 - textW / 2
-        local y = 200 + i * 60
+    if currentMenu == "main" then
+        if planetImage then
+            local scale = 3
+            local planetW = planetImage:getWidth() * scale
+            local planetH = planetImage:getHeight() * scale
+            local planetX = 100
+            local planetY = screenH - planetH - 80
+            love.graphics.setColor(1, 1, 1)
+            love.graphics.draw(planetImage, planetX, planetY, 0, scale, scale)
+        end
 
-        love.graphics.setColor(0.2, 0.2, 0.2, 1)
-        love.graphics.rectangle("fill", x - 20, y - 10, textW + 40, textH + 20, 10, 10)
+        if playerImage then
+            local px = 200
+            local py = 180
+            local cx = playerImage:getWidth() / 2
+            local cy = playerImage:getHeight() / 2
+            love.graphics.setColor(1, 1, 1)
+            love.graphics.draw(playerImage, px, py, playerAngle, 1, 1, cx, cy)
+        end
 
+        local rightX = screenW * 0.75
+        local titleY = 160
+
+        love.graphics.setFont(titleFont)
+        local titleW = titleFont:getWidth(title)
         love.graphics.setColor(1, 1, 1)
-        love.graphics.print(btn.label, x, y)
+        love.graphics.print(title, rightX - titleW / 2, titleY)
+
+
+        love.graphics.setFont(font)
+        for i, btn in ipairs(buttons) do
+            local textW = font:getWidth(btn.label)
+            local textH = font:getHeight()
+            local x = rightX - textW / 2
+            local y = 200 + i * 70
+
+            love.graphics.setColor(0.2, 0.2, 0.2)
+            love.graphics.rectangle("fill", x - 20, y - 10, textW + 40, textH + 20, 10, 10)
+
+            love.graphics.setColor(1, 1, 1)
+            love.graphics.print(btn.label, x, y)
+        end
+
+    else
+        love.graphics.setFont(titleFont)
+        local titleW = titleFont:getWidth(title)
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.print(title, screenW / 2 - titleW / 2, 100)
+
+        love.graphics.setFont(font)
+        for i, btn in ipairs(buttons) do
+            local textW = font:getWidth(btn.label)
+            local textH = font:getHeight()
+            local x = screenW / 2 - textW / 2
+            local y = 200 + i * 70
+
+            love.graphics.setColor(0.2, 0.2, 0.2)
+            love.graphics.rectangle("fill", x - 20, y - 10, textW + 40, textH + 20, 10, 10)
+
+            love.graphics.setColor(1, 1, 1)
+            love.graphics.print(btn.label, x, y)
+        end
     end
 end
 
 function Menu.mousepressed(x, y, button)
     if button ~= 1 then return end
+
+    local screenW = love.graphics.getWidth()
+    local menuX = (currentMenu == "main") and (screenW * 0.75) or (screenW / 2)
+
     for i, btn in ipairs(buttons) do
         local textW = font:getWidth(btn.label)
         local textH = font:getHeight()
-        local bx = love.graphics.getWidth() / 2 - textW / 2
-        local by = 200 + i * 60
+        local bx = menuX - textW / 2
+        local by = 200 + i * 70
         local boxW, boxH = textW + 40, textH + 20
+
         if x > bx - 20 and x < bx - 20 + boxW and y > by - 10 and y < by - 10 + boxH then
             btn.action()
         end

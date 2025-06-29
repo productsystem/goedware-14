@@ -355,7 +355,7 @@ end
 
 function love.update(dt)
     if Menu.isOpen() then
-
+        Menu.update(dt)
     else
         updateGame(dt)
     end
