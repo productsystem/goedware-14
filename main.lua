@@ -67,7 +67,6 @@ function initGame()
         end
     end)
 
-    -- Load entities
     if gameMap.layers["Objects"] then
         for _, obj in ipairs(gameMap.layers["Objects"].objects) do
             if obj.gid then
@@ -116,16 +115,15 @@ function initGame()
 end
 
 function updateGame(dt)
-    if player.boarded then return end -- freeze game logic when launched
-
-    player:update(dt, entities, items, cam, enemies)
+    if not player.boarded then
+        player:update(dt, entities, items, cam, enemies)
+    end
     grinder:update(dt, items, player)
     rocket:update(dt, player)
     world:update(dt)
 
     love.keyboard.wasPressed = {}
 
-    -- Update player position based on collider
     if player.collider then
         local cx, cy = player.collider:getPosition()
         player.x = cx - player.w / 2
@@ -154,7 +152,6 @@ function updateGame(dt)
     cam.x = math.max(w / 2, math.min(mapW - w / 2, cam.x))
     cam.y = math.max(h / 2, math.min(mapH - h / 2, cam.y))
 
-    -- Secret orb logic
     if not orbSpawned and secretZone then
         local allAlive = true
         for _, flower in ipairs(secretFlowers) do
@@ -206,18 +203,21 @@ end
 function love.load()
     love.window.setTitle("Project Oil")
     love.window.setMode(1280, 720)
+    Menu.load()
 end
 
 function love.update(dt)
-    if gameState == "game" then
+    if Menu.isOpen() then
+        -- Menu.update(dt)
+    else
         updateGame(dt)
     end
 end
 
 function love.draw()
-    if gameState == "menu" then
+    if Menu.isOpen() then
         Menu.draw()
-    elseif gameState == "game" then
+    else
         drawGame()
     end
 end
@@ -225,16 +225,15 @@ end
 function love.keypressed(key)
     if not love.keyboard.wasPressed then love.keyboard.wasPressed = {} end
     love.keyboard.wasPressed[key] = true
+
+    if key == "escape" and not Menu.isOpen() then
+        Menu.pause()
+    end
 end
 
+
 function love.mousepressed(x, y, button)
-    if gameState == "menu" then
-        local result = Menu.mousepressed(x, y, button)
-        if result == "start" then
-            initGame()
-            gameState = "game"
-        elseif result == "exit" then
-            love.event.quit()
-        end
+    if Menu.isOpen() then
+        Menu.mousepressed(x, y, button)
     end
 end
