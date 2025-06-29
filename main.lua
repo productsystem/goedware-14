@@ -17,6 +17,8 @@ local secretFlowers = {}
 local orbSpawned = false
 local gameState = "menu"
 
+local oilFont
+
 sti = require("libs.sti")
 camera = require("libs.camera")
 wf = require('libs.windfield')
@@ -195,12 +197,35 @@ function drawGame()
     world:draw()
     cam:detach()
 
-    love.graphics.setColor(0, 0, 0, 1)
-    love.graphics.print("Oil : " .. tostring(player.oil), 10, 10)
+    drawOilUI()
     love.graphics.setColor(1, 1, 1, 1)
 end
 
+function drawOilUI()
+    local oilText = "Oil: " .. tostring(player.oil)
+    local padding = 10
+
+    love.graphics.setFont(oilFont)
+    local textW = oilFont:getWidth(oilText)
+    local textH = oilFont:getHeight()
+
+    local boxX = 20
+    local boxY = 20
+    local boxW = textW + padding * 2
+    local boxH = textH + padding * 2
+
+    love.graphics.setColor(0.1, 0.1, 0.1, 0.7)
+    love.graphics.rectangle("fill", boxX, boxY, boxW, boxH, 12, 12)
+
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.print(oilText, boxX + padding, boxY + padding)
+
+    love.graphics.setColor(1, 1, 1, 1)
+end
+
+
 function love.load()
+    oilFont = love.graphics.newFont("fonts/PressStart2P-Regular.ttf",24)
     love.window.setTitle("Project Oil")
     love.window.setMode(1280, 720)
     Menu.load()
