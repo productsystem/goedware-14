@@ -220,6 +220,15 @@ function initGame()
             end
         end
     end
+    if gameMap.layers["Wall"] then
+        for _, obj in ipairs(gameMap.layers["Wall"].objects) do
+            if obj.type == "Wall" then
+                local wall = world:newRectangleCollider(obj.x, obj.y, obj.width, obj.height)
+                wall:setType("static")
+                table.insert(walls, wall)
+            end
+        end
+    end
     gameJustStarted = true
     startIntroCutscene()
 end

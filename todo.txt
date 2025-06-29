@@ -1,19 +1,13 @@
 Things To-Do:
 
-[ ] - Player spritesheet
-[x] - Tileset
-[ ] - Map layout
-[ ] - Easter egg
-[x] - Enemy spritesheet
-[x] - Misc. entities spritesheet
-[ ] - SFX
+[ ] - Main menu
+[ ] - Player animations
+[ ] - Grinder animations
 [ ] - Music
-[ ] - Rocket
-[x] - Enemy behaviour
-[x] - Item sprites
-[ ] - UI
-[ ] - Story
-[x] - Tiled implementation of entities
-[x] - Draw order
-[x] - Player Health
-[x] - Item type + oil weightage
+[ ] - SFX
+[ ] - Oil values set
+[ ] - Collection and hit radius set
+[ ] - Story/Tutorial
+[ ] - Orbit Story
+[ ] - Credits
+[ ] - Walls around the edges

@@ -9,8 +9,8 @@ return {
   height = 70,
   tilewidth = 32,
   tileheight = 32,
-  nextlayerid = 5,
-  nextobjectid = 224,
+  nextlayerid = 6,
+  nextobjectid = 228,
   properties = {},
   tilesets = {
     {
@@ -2713,6 +2713,74 @@ return {
           y = 2080,
           width = 0,
           height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        }
+      }
+    },
+    {
+      type = "objectgroup",
+      draworder = "topdown",
+      id = 5,
+      name = "Wall",
+      class = "",
+      visible = true,
+      opacity = 1,
+      offsetx = 0,
+      offsety = 0,
+      parallaxx = 1,
+      parallaxy = 1,
+      properties = {},
+      objects = {
+        {
+          id = 224,
+          name = "",
+          type = "Wall",
+          shape = "rectangle",
+          x = 0,
+          y = 0,
+          width = 2240,
+          height = 32,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 225,
+          name = "",
+          type = "Wall",
+          shape = "rectangle",
+          x = 2208,
+          y = 0,
+          width = 32,
+          height = 2240,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 226,
+          name = "",
+          type = "Wall",
+          shape = "rectangle",
+          x = 0,
+          y = 2208,
+          width = 2240,
+          height = 32,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 227,
+          name = "",
+          type = "Wall",
+          shape = "rectangle",
+          x = 0,
+          y = 0,
+          width = 32,
+          height = 2240,
           rotation = 0,
           visible = true,
           properties = {}
