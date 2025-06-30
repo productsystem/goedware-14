@@ -89,8 +89,7 @@ function Player:update(dt,entities,items, cam,enemies)
 end
 
 function Player:die()
-    love.timer.sleep(1)
-    love.event.quit("restart")
+    Menu.showDeath()
 end
 
 function Player:takeDamage(amt)

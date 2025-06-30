@@ -75,6 +75,11 @@ function Menu.update(dt)
     end
 end
 
+function Menu.showDeath()
+    currentMenu = "death"
+end
+
+
 function Menu.draw()
     if cutsceneStage ~= nil then
         local stage = cutsceneData[cutsceneStage + 1]
@@ -170,6 +175,32 @@ function Menu.draw()
     love.graphics.setFont(love.graphics.newFont("fonts/PressStart2P-Regular.ttf", 16))
     love.graphics.printf("Press ESC to return to main menu", textboxX + 20, textboxY + 150, textboxW - 40)
 
+        elseif currentMenu == "death" then
+    local screenW, screenH = love.graphics.getWidth(), love.graphics.getHeight()
+    local textboxW = screenW * 0.6
+    local textboxX = (screenW - textboxW) / 2
+    local textboxY = screenH * 0.3
+
+    love.graphics.setColor(0.1, 0.1, 0.1, 0.8)
+    love.graphics.rectangle("fill", textboxX, textboxY, textboxW, 150, 12, 12)
+
+    love.graphics.setColor(1, 0.2, 0.2)
+    love.graphics.setFont(love.graphics.newFont("fonts/PressStart2P-Regular.ttf", 24))
+    love.graphics.printf("You Died", textboxX + 20, textboxY + 20, textboxW - 40, "center")
+
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.setFont(font)
+    local label = "Exit to Main Menu"
+    local textW = font:getWidth(label)
+    local textH = font:getHeight()
+    local btnX = screenW / 2 - textW / 2
+    local btnY = textboxY + 80
+
+    love.graphics.setColor(0.2, 0.2, 0.2)
+    love.graphics.rectangle("fill", btnX - 20, btnY - 10, textW + 40, textH + 20, 10, 10)
+
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.print(label, btnX, btnY)
 
     
 
@@ -211,6 +242,21 @@ function Menu.mousepressed(x, y, button)
         end
         return
     end
+
+        if currentMenu == "death" then
+        local label = "Exit to Main Menu"
+        local textW = font:getWidth(label)
+        local textH = font:getHeight()
+        local btnX = screenW / 2 - textW / 2
+        local btnY = love.graphics.getHeight() * 0.3 + 80
+        local boxW, boxH = textW + 40, textH + 20
+
+        if x > btnX - 20 and x < btnX - 20 + boxW and y > btnY - 10 and y < btnY - 10 + boxH then
+            Menu.load()
+        end
+        return
+    end
+
 
     for i, btn in ipairs(buttons) do
         local textW = font:getWidth(btn.label)
