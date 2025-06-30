@@ -11,7 +11,9 @@ function Rocket.new(x,y,maxOil,world)
     self.siphonTimer = 0
     self.siphonBuffer = 0
     self.siphonRadius = 100
-    self.image = love.graphics.newImage("sprites/rocket_scaled.png")
+    self.imageIdle = love.graphics.newImage("sprites/rocket_scaled.png")
+    self.imageLaunch = love.graphics.newImage("sprites/rocket_launch.png")
+    self.image = self.imageIdle
     self.collider = world:newRectangleCollider(self.x, self.y + self.h - 32, self.w, 32)
     self.collider:setType("static")
     self.collider:setCollisionClass("Rocket")
@@ -27,6 +29,7 @@ end
 
 function Rocket:update(dt, player)
     if self.launched then
+        self.image = self.imageLaunch
         self.launchTimer = self.launchTimer + dt
         self.y = self.y - 60*dt
     end

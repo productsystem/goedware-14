@@ -7,6 +7,7 @@ local titleFont = love.graphics.newFont("fonts/PressStart2P-Regular.ttf",48)
 
 local title = ""
 local backgroundColor = {0.1, 0.1, 0.1, 0.8}
+    love.graphics.setDefaultFilter("nearest", "nearest")
 
 local planetImage = love.graphics.newImage("sprites/planet.png")
 local playerImage = love.graphics.newImage("sprites/player.png")
@@ -33,6 +34,7 @@ local cutsceneData = {
         text = "Load oil into the Rocket to launch it with holding R and complete your mission. [REDACTED] must also be injected with R. Good luck!"
     }
 }
+
 
 function Menu.resume()
     Menu.load()
@@ -278,9 +280,9 @@ end
 function Menu.showGameOver(orbCollected)
     currentMenu = "gameover"
     if orbCollected then
-        gameOverMessage = "Mission complete. You’ve recovered the Orb. We are safe... for now."
+        gameOverMessage = "Mission complete. You’ve recovered the [REDACTED]. We are safe... for now."
     else
-        gameOverMessage = "Mission complete. But the Orb was never found. What lies ahead is uncertain..."
+        gameOverMessage = "Mission complete. But the [REDACTED] was never found. What lies ahead is uncertain..."
     end
 end
 
