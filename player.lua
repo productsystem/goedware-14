@@ -50,6 +50,7 @@ function Player.new(x,y,world)
     self.invincibilityTimer = 0
     self.invincibilityDuration = 1
     self.boarded = false
+    self.dead = false
     return self
 end
 
@@ -87,6 +88,11 @@ function Player:update(dt,entities,items, cam,enemies)
 
 end
 
+function Player:die()
+    love.timer.sleep(1)
+    love.event.quit("restart")
+end
+
 function Player:takeDamage(amt)
     if not self.invincible and self.oil > 0 then
         self.oil = self.oil - amt
@@ -94,7 +100,11 @@ function Player:takeDamage(amt)
         self.invincibilityTimer = self.invincibilityDuration
         hitSound:play()
     end
-    
+
+    if self.oil <= 0 and not self.dead then
+        self.dead = true
+        self:die()
+    end
 end
 
 function Player:pickupAndDrop(items)

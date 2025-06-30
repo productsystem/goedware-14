@@ -12,5 +12,5 @@ Things To-Do:
 [x] - Walls around the edges
 [x] - Enemy damage indication
 [x] - Orb not grind, rocket gain
-[ ] - Player death
+[x] - Player death
 [ ] - Rocket launch
