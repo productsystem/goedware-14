@@ -1,6 +1,6 @@
 Things To-Do:
 
-[ ] - Main menu
+[x] - Main menu
 [x] - Player animations
 [x] - Grinder animations
 [ ] - Music
@@ -11,3 +11,4 @@ Things To-Do:
 [ ] - Orbit Story
 [ ] - Credits
 [x] - Walls around the edges
+[ ] - Enemy damage indication

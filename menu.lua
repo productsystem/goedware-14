@@ -12,6 +12,27 @@ local planetImage = love.graphics.newImage("sprites/planet.png")
 local playerImage = love.graphics.newImage("sprites/player.png")
 local playerAngle = 0
 
+cutsceneStage = nil
+local cutsceneData = {
+    {
+        sprite = love.graphics.newImage("sprites/planet.png"),
+        text = "This is Ferion-5, a planet with crab-like species. You have been sent here on a mission to retreive the [REDACTED]."
+    },
+    {
+        sprite = love.graphics.newImage("sprites/player.png"),
+        text = "Juno. Use WASD to move. Left click to attack in that direction to harvest items. Press E to pick-up items."
+    },
+    {
+        sprite = love.graphics.newImage("sprites/grinder.png"),
+        text = "This is Mr.Grinder, scary, but your friend. Toss items with E inside to gain oil. Oil doubles as your health, so be careful."
+    },
+    {
+        sprite = love.graphics.newImage("sprites/rocket.png"),
+        text = "Load oil into the Rocket to launch it with holding R and complete your mission. Good luck!"
+    }
+}
+
+
 function Menu.load()
     love.graphics.setDefaultFilter("nearest", "nearest")
     currentMenu = "main"
@@ -20,7 +41,7 @@ function Menu.load()
     buttons = {
         { label = "Start Game", action = function()
             currentMenu = nil
-            initGame()
+            cutsceneStage = 0
         end },
         { label = "Exit", action = function()
             love.event.quit()
@@ -49,6 +70,38 @@ function Menu.update(dt)
 end
 
 function Menu.draw()
+    if cutsceneStage ~= nil then
+        local stage = cutsceneData[cutsceneStage + 1]
+        if stage then
+            local screenW, screenH = love.graphics.getWidth(), love.graphics.getHeight()
+            love.graphics.setColor(0.05, 0.05, 0.05, 0.9)
+            love.graphics.rectangle("fill", 0, 0, screenW, screenH)
+            local sprite = stage.sprite
+            local scale = 3
+            local sx = 100
+            local sy = screenH / 2 - (sprite:getHeight() * scale) / 2
+            love.graphics.setColor(1, 1, 1)
+            love.graphics.draw(sprite, sx, sy, 0, scale, scale)
+
+            local textboxW = screenW * 0.45
+            local textboxX = screenW * 0.5
+            local textboxY = screenH * 0.25
+            love.graphics.setColor(0.2, 0.2, 0.2, 0.8)
+            love.graphics.rectangle("fill", textboxX, textboxY, textboxW, 300, 12, 12)
+
+            love.graphics.setColor(1, 1, 1)
+            love.graphics.setFont(font)
+
+            local text = stage.text
+            love.graphics.printf(text, textboxX + 20, textboxY + 20, textboxW - 40)
+
+            love.graphics.setFont(font)
+            love.graphics.print("Click to continue...", textboxX + 20, textboxY + 210)
+
+            return
+        end
+    end
+
     local screenW, screenH = love.graphics.getWidth(), love.graphics.getHeight()
     love.graphics.setColor(backgroundColor)
     love.graphics.rectangle("fill", 0, 0, screenW, screenH)
@@ -123,6 +176,17 @@ function Menu.mousepressed(x, y, button)
 
     local screenW = love.graphics.getWidth()
     local menuX = (currentMenu == "main") and (screenW * 0.75) or (screenW / 2)
+
+    if cutsceneStage ~= nil then
+        if cutsceneStage + 1 >= #cutsceneData then
+            cutsceneStage = nil
+            currentMenu = nil
+            initGame()
+        else
+            cutsceneStage = cutsceneStage + 1
+        end
+        return
+    end
 
     for i, btn in ipairs(buttons) do
         local textW = font:getWidth(btn.label)

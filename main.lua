@@ -354,6 +354,9 @@ function love.load()
 end
 
 function love.update(dt)
+    if cutsceneStage ~= nil then 
+        Menu.update(dt)
+        return end
     if Menu.isOpen() then
         Menu.update(dt)
     else
@@ -362,7 +365,10 @@ function love.update(dt)
 end
 
 function love.draw()
-    if Menu.isOpen() then
+    if cutsceneStage ~= nil then
+        Menu.draw()
+        return
+    elseif Menu.isOpen() then
         Menu.draw()
     else
         drawGame()
@@ -380,7 +386,7 @@ end
 
 
 function love.mousepressed(x, y, button)
-    if Menu.isOpen() then
+    if Menu.isOpen() or cutsceneStage~=nil then
         Menu.mousepressed(x, y, button)
     end
 end
