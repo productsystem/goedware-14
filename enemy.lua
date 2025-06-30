@@ -2,6 +2,7 @@ local Enemy = {}
 Enemy.__index = Enemy
 
 local anim8 = require("libs.anim8")
+local hitSound = love.audio.newSource("sounds/harvest.wav", "static")
 
 function Enemy.new(x,y,world)
     local self = setmetatable({},Enemy)
@@ -83,6 +84,9 @@ end
 
 function Enemy:takeDamage(amt)
     self.health = self.health - amt
+    hitSound:stop()
+    hitSound:setPitch(0.9 + math.random() * 0.2)
+    hitSound:play()
     self.hitFlashTimer = self.hitFlashDuration
 end
 

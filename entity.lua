@@ -2,6 +2,7 @@ local Entity = {}
 Entity.__index = Entity
 
 local imageCache = {} --so that images load only once
+local hitSound = love.audio.newSource("sounds/harvest.wav", "static")
 
 
 local function getTileImageFromGID(gid)
@@ -83,6 +84,9 @@ end
 function Entity:hit()
     self.health = self.health - 1
     self.hitTimer = self.hitDuration
+    hitSound:stop()
+    hitSound:setPitch(0.9 + math.random() * 0.2)
+    hitSound:play()
     if self.health <= 0 then
         self.harvested = true
         if self.collider then

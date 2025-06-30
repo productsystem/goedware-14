@@ -13,4 +13,4 @@ Things To-Do:
 [x] - Enemy damage indication
 [x] - Orb not grind, rocket gain
 [x] - Player death
-[ ] - Rocket launch
+[x] - Rocket launch

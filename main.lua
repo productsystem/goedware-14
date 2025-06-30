@@ -34,6 +34,8 @@ world = nil
 local orbShineImg = love.graphics.newImage("sprites/orb_shine.png")
 local orbBigImg = love.graphics.newImage("sprites/orb.png")
 
+local orbSound = love.audio.newSource("sounds/orb.wav", "static")
+
 
 function lerp(a, b, t)
     return a + (b - a) * t
@@ -59,6 +61,7 @@ function startOrbCutscene(orbPos)
         {
             duration = 0.8,
             draw = function()
+                orbSound:play()
                 love.graphics.draw(orbBigImg, orbPos.x - 16, orbPos.y - 16)
             end
         },

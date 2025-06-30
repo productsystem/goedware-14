@@ -1,4 +1,5 @@
 local Menu = {}
+local clickSound = love.audio.newSource("sounds/button.wav", "static")
 
 currentMenu = nil
 local buttons = {}
@@ -254,6 +255,8 @@ function Menu.mousepressed(x, y, button)
         local boxW, boxH = textW + 40, textH + 20
 
         if x > btnX - 20 and x < btnX - 20 + boxW and y > btnY - 10 and y < btnY - 10 + boxH then
+            clickSound:stop()
+            clickSound:play()
             Menu.load()
         end
         return
@@ -268,6 +271,8 @@ function Menu.mousepressed(x, y, button)
         local boxW, boxH = textW + 40, textH + 20
 
         if x > bx - 20 and x < bx - 20 + boxW and y > by - 10 and y < by - 10 + boxH then
+            clickSound:stop()
+            clickSound:play()
             btn.action()
         end
     end

@@ -1,5 +1,8 @@
 local Rocket = {}
 Rocket.__index = Rocket
+local siphonSound = love.audio.newSource("sounds/siphon.wav", "static")
+siphonSound:setLooping(true)
+local rocketSound = love.audio.newSource("sounds/rocket.mp3", "static")
 
 function Rocket.new(x,y,maxOil,world)
     local self = setmetatable({}, Rocket)
@@ -29,8 +32,15 @@ end
 
 function Rocket:update(dt, player)
     if self.launched then
+        if not rocketSound:isPlaying() then
+            rocketSound:seek(0) -- start from beginning
+            rocketSound:play()
+        end
         self.image = self.imageLaunch
         self.launchTimer = self.launchTimer + dt
+        if self.launchTimer > 3 and rocketSound:isPlaying() then
+            rocketSound:stop()
+        end
         self.y = self.y - 60*dt
     end
     if not self.launched and self.currOil >= self.maxOil then
@@ -50,6 +60,10 @@ function Rocket:update(dt, player)
     if dist <= self.siphonRadius and player.oil > 1 and love.keyboard.isDown("r") then
         self.siphonTimer = self.siphonTimer + dt
         local rate = math.min(1 + self.siphonTimer * 2, 10)
+        if not siphonSound:isPlaying() then
+            siphonSound:play()
+        end
+        siphonSound:setPitch(1 + self.siphonTimer * 0.2)
         self.siphonBuffer = self.siphonBuffer + rate * dt
         if self.siphonBuffer > 0 then
             local amount = math.floor(self.siphonBuffer)
@@ -63,6 +77,12 @@ function Rocket:update(dt, player)
             end
         end
     else
+        self.siphonTimer = 0
+        self.siphonBuffer = 0
+        if siphonSound:isPlaying() then
+            siphonSound:stop()
+        end
+        siphonSound:setPitch(1)
         self.siphonTimer = 0
         self.siphonBuffer = 0
     end

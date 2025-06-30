@@ -1,5 +1,6 @@
 local Grinder = {}
 Grinder.__index = Grinder
+local grindSound = love.audio.newSource("sounds/grind.wav", "static")
 
 function Grinder.new(x,y, radius)
     local self = setmetatable({}, Grinder)
@@ -34,6 +35,8 @@ function Grinder:update(dt,items,player)
                 player.oil = player.oil + item.oilValue
                 self.oilProduced = self.oilProduced + item.oilValue
                 table.remove(items, i)
+                grindSound:stop()
+                grindSound:play()
             end
         end
     end
