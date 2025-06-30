@@ -2,10 +2,10 @@ local Item = {}
 Item.__index = Item
 
 local oilValues = {
-    tree = 1,
-    enemy = 5,
-    flower = 3,
-    rock = 2,
+    tree = 2,
+    enemy = 6,
+    flower = 4,
+    rock = 3,
 }
 
 function Item.new(x,y,type)

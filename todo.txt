@@ -5,7 +5,7 @@ Things To-Do:
 [x] - Grinder animations
 [ ] - Music
 [ ] - SFX
-[ ] - Oil values set
+[x] - Oil values set
 [x] - Collection and hit radius set
 [x] - Story/Tutorial
 [x] - Orbit Story

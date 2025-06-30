@@ -117,10 +117,7 @@
   <object id="45" name="flower_secret" gid="102" x="1664" y="2176" width="32" height="64"/>
   <object id="46" name="flower_secret" gid="102" x="1696" y="2144" width="32" height="64"/>
   <object id="49" gid="102" x="960" y="1312" width="32" height="64"/>
-  <object id="52" gid="102" x="1024" y="1312" width="32" height="64"/>
-  <object id="53" gid="102" x="960" y="1408" width="32" height="64"/>
   <object id="54" gid="102" x="1024" y="1408" width="32" height="64"/>
-  <object id="55" gid="102" x="928" y="1376" width="32" height="64"/>
   <object id="56" gid="102" x="832" y="1312" width="32" height="64"/>
   <object id="57" gid="102" x="832" y="1472" width="32" height="64"/>
   <object id="58" gid="103" x="832" y="1056" width="32" height="32"/>
@@ -192,7 +189,6 @@
   <object id="130" gid="101" x="544" y="1632" width="32" height="64"/>
   <object id="131" gid="101" x="608" y="1632" width="32" height="64"/>
   <object id="132" gid="101" x="1440" y="1280" width="32" height="64"/>
-  <object id="133" gid="101" x="1472" y="1408" width="32" height="64"/>
   <object id="134" gid="101" x="1664" y="1376" width="32" height="64"/>
   <object id="135" gid="101" x="1632" y="1312" width="32" height="64"/>
   <object id="136" gid="101" x="1536" y="1280" width="32" height="64"/>
@@ -204,11 +200,9 @@
   <object id="142" gid="101" x="1440" y="832" width="32" height="64"/>
   <object id="143" gid="101" x="1632" y="864" width="32" height="64"/>
   <object id="144" gid="101" x="1568" y="704" width="32" height="64"/>
-  <object id="145" gid="101" x="1472" y="672" width="32" height="64"/>
   <object id="146" gid="101" x="1376" y="640" width="32" height="64"/>
   <object id="147" gid="101" x="1632" y="544" width="32" height="64"/>
   <object id="148" gid="101" x="1792" y="672" width="32" height="64"/>
-  <object id="149" gid="101" x="1696" y="704" width="32" height="64"/>
   <object id="150" gid="101" x="1856" y="448" width="32" height="64"/>
   <object id="151" gid="101" x="2048" y="640" width="32" height="64"/>
   <object id="152" gid="101" x="1888" y="608" width="32" height="64"/>
