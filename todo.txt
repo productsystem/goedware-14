@@ -7,8 +7,9 @@ Things To-Do:
 [ ] - SFX
 [ ] - Oil values set
 [ ] - Collection and hit radius set
-[ ] - Story/Tutorial
+[x] - Story/Tutorial
 [ ] - Orbit Story
 [ ] - Credits
 [x] - Walls around the edges
 [ ] - Enemy damage indication
+[ ] - Orb not grind, rocket gain

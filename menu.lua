@@ -1,6 +1,6 @@
 local Menu = {}
 
-local currentMenu = nil
+currentMenu = nil
 local buttons = {}
 local font = love.graphics.newFont("fonts/PressStart2P-Regular.ttf", 24)
 local titleFont = love.graphics.newFont("fonts/PressStart2P-Regular.ttf",48)
@@ -11,6 +11,8 @@ local backgroundColor = {0.1, 0.1, 0.1, 0.8}
 local planetImage = love.graphics.newImage("sprites/planet.png")
 local playerImage = love.graphics.newImage("sprites/player.png")
 local playerAngle = 0
+
+local gameOverMessage = ""
 
 cutsceneStage = nil
 local cutsceneData = {
@@ -31,6 +33,10 @@ local cutsceneData = {
         text = "Load oil into the Rocket to launch it with holding R and complete your mission. Good luck!"
     }
 }
+
+function Menu.resume()
+    Menu.load()
+end
 
 
 function Menu.load()
@@ -148,6 +154,24 @@ function Menu.draw()
             love.graphics.setColor(1, 1, 1)
             love.graphics.print(btn.label, x, y)
         end
+    elseif currentMenu == "gameover" then
+    local screenW, screenH = love.graphics.getWidth(), love.graphics.getHeight()
+    local textboxW = screenW * 0.6
+    local textboxX = (screenW - textboxW) / 2
+    local textboxY = screenH * 0.3
+
+    love.graphics.setColor(0.1, 0.1, 0.1, 0.8)
+    love.graphics.rectangle("fill", textboxX, textboxY, textboxW, 200, 12, 12)
+
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.setFont(love.graphics.newFont("fonts/PressStart2P-Regular.ttf", 20))
+    love.graphics.printf(gameOverMessage, textboxX + 20, textboxY + 20, textboxW - 40)
+
+    love.graphics.setFont(love.graphics.newFont("fonts/PressStart2P-Regular.ttf", 16))
+    love.graphics.printf("Press ESC to return to main menu", textboxX + 20, textboxY + 150, textboxW - 40)
+
+
+    
 
     else
         love.graphics.setFont(titleFont)
@@ -205,19 +229,15 @@ function Menu.isOpen()
     return currentMenu ~= nil
 end
 
-function Menu.showGameOver()
+function Menu.showGameOver(orbCollected)
     currentMenu = "gameover"
-    title = "Mission Complete"
-    backgroundColor = {0, 0, 0, 0.8}
-    buttons = {
-        { label = "Exit to Menu", action = function()
-            Menu.load()
-        end },
-        { label = "Quit", action = function()
-            love.event.quit()
-        end }
-    }
+    if orbCollected then
+        gameOverMessage = "Mission complete. You’ve recovered the Orb. We are safe... for now."
+    else
+        gameOverMessage = "Mission complete. But the Orb was never found. What lies ahead is uncertain..."
+    end
 end
+
 
 
 return Menu

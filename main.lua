@@ -34,6 +34,7 @@ world = nil
 local orbShineImg = love.graphics.newImage("sprites/orb_shine.png")
 local orbBigImg = love.graphics.newImage("sprites/orb.png")
 
+
 function lerp(a, b, t)
     return a + (b - a) * t
 end
@@ -379,9 +380,16 @@ function love.keypressed(key)
     if not love.keyboard.wasPressed then love.keyboard.wasPressed = {} end
     love.keyboard.wasPressed[key] = true
 
-    if key == "escape" and not Menu.isOpen() then
-        Menu.pause()
+    if key == "escape" then
+        if Menu.isOpen() then
+            Menu.resume()
+        elseif currentMenu == "gameover" then
+            Menu.resume()
+        else
+            Menu.pause()
+        end
     end
+
 end
 
 

@@ -80,7 +80,8 @@ function Rocket:update(dt, player)
     end
 
     if self.launched and self.launchTimer > 3 and not self.markedGameOver then
-        Menu.showGameOver()
+        orbGot = false
+        Menu.showGameOver(orbGot)
         self.markedGameOver = true
     end
 end
