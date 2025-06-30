@@ -6,7 +6,7 @@ Things To-Do:
 [ ] - Music
 [ ] - SFX
 [ ] - Oil values set
-[ ] - Collection and hit radius set
+[x] - Collection and hit radius set
 [x] - Story/Tutorial
 [x] - Orbit Story
 [x] - Walls around the edges

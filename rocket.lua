@@ -10,7 +10,7 @@ function Rocket.new(x,y,maxOil,world)
     self.finished = false
     self.siphonTimer = 0
     self.siphonBuffer = 0
-    self.siphonRadius = 64
+    self.siphonRadius = 100
     self.image = love.graphics.newImage("sprites/rocket_scaled.png")
     self.collider = world:newRectangleCollider(self.x, self.y + self.h - 32, self.w, 32)
     self.collider:setType("static")

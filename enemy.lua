@@ -10,8 +10,8 @@ function Enemy.new(x,y,world)
     self.startX,self.startY = x,y
     self.speed = 100
     self.health = 3
-    self.chaseRadius = 100
-    self.leaveRadius = 200
+    self.chaseRadius = 150
+    self.leaveRadius = 250
     self.active = false
 
     self.collider = world:newRectangleCollider(x, y, self.w, self.h)

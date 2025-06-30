@@ -203,7 +203,7 @@ function initGame()
             elseif obj.type == "Player" then
                 player = Player.new(obj.x, obj.y, world)
             elseif obj.type == "Grinder" then
-                grinder = Grinder.new(obj.x, obj.y)
+                grinder = Grinder.new(obj.x, obj.y, 100)
             elseif obj.type == "Rocket" then
                 rocket = Rocket.new(obj.x, obj.y, 10, world)
             elseif obj.type == "Orb" then
