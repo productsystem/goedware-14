@@ -21,6 +21,7 @@ function Rocket.new(x,y,maxOil,world)
     self.launchTimer = 0
     self.boardingRadius = 100
     self.markedGameOver = false
+    self.orbReceived = false
     return self
 end
 
@@ -77,10 +78,23 @@ function Rocket:update(dt, player)
             player.boarded = true
             player.collider:setActive(false)
         end
+        
+    end
+    if not self.orbReceived
+        and player.holdingItem
+        and player.holdingItem.itemType == "orb"
+        and dist < self.boardingRadius
+        and love.keyboard.wasPressed
+        and love.keyboard.wasPressed["r"] then
+
+        self.orbReceived = true
+        player.holdingItem.consumed = true
+        player.holdingItem = nil
     end
 
+
     if self.launched and self.launchTimer > 3 and not self.markedGameOver then
-        orbGot = false
+        local orbGot = self.orbReceived
         Menu.showGameOver(orbGot)
         self.markedGameOver = true
     end

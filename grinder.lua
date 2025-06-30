@@ -27,7 +27,7 @@ function Grinder:update(dt,items,player)
     self.y = cy - self.h / 2
     for i = #items, 1, -1 do
         local item = items[i]
-        if not item.picked and not item.consumed then
+        if not item.picked and not item.consumed and item.itemType ~= "orb" then
             local ix, iy = item.x + item.w/2, item.y + item.h/2
             local d = math.sqrt((self.x - ix)^2 + (self.y - iy)^2)
             if d < self.radius then

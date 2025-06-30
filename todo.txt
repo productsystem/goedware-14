@@ -8,8 +8,8 @@ Things To-Do:
 [ ] - Oil values set
 [ ] - Collection and hit radius set
 [x] - Story/Tutorial
-[ ] - Orbit Story
-[ ] - Credits
+[x] - Orbit Story
 [x] - Walls around the edges
 [ ] - Enemy damage indication
-[ ] - Orb not grind, rocket gain
+[x] - Orb not grind, rocket gain
+[ ] - Player death

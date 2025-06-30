@@ -2553,7 +2553,7 @@ return {
           name = "",
           type = "Enemy",
           shape = "point",
-          x = 1408,
+          x = 1568,
           y = 224,
           width = 0,
           height = 0,

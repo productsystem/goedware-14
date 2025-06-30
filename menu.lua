@@ -30,7 +30,7 @@ local cutsceneData = {
     },
     {
         sprite = love.graphics.newImage("sprites/rocket.png"),
-        text = "Load oil into the Rocket to launch it with holding R and complete your mission. Good luck!"
+        text = "Load oil into the Rocket to launch it with holding R and complete your mission. [REDACTED] must also be injected with R. Good luck!"
     }
 }
 

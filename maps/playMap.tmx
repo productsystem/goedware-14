@@ -297,7 +297,7 @@
   <object id="209" type="Enemy" x="1088" y="160">
    <point/>
   </object>
-  <object id="210" type="Enemy" x="1408" y="224">
+  <object id="210" type="Enemy" x="1568" y="224">
    <point/>
   </object>
   <object id="211" type="Enemy" x="1696" y="384">

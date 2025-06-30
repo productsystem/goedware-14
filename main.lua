@@ -151,8 +151,6 @@ function initGame()
     orbLoc = {}
     gameJustStarted = false
     gameState = "game"
-    local orbLoc = {}
-    local gameJustStarted = false
     gameMap = sti('maps/playMap.lua')
     cam = camera()
     cam:zoomTo(1)
