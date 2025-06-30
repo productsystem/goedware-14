@@ -208,7 +208,7 @@ function initGame()
             elseif obj.type == "Grinder" then
                 grinder = Grinder.new(obj.x, obj.y, 100)
             elseif obj.type == "Rocket" then
-                rocket = Rocket.new(obj.x, obj.y, 5, world)
+                rocket = Rocket.new(obj.x, obj.y, 50, world)
             elseif obj.type == "Orb" then
                 orbLoc = {x=obj.x,y=obj.y}
             end
@@ -317,7 +317,7 @@ function drawGame()
     end)
 
     for _, obj in ipairs(drawables) do obj:draw() end
-    world:draw()
+    -- world:draw()
     Cutscene.draw()
     cam:detach()
 
