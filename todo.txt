@@ -10,6 +10,7 @@ Things To-Do:
 [x] - Story/Tutorial
 [x] - Orbit Story
 [x] - Walls around the edges
-[ ] - Enemy damage indication
+[x] - Enemy damage indication
 [x] - Orb not grind, rocket gain
 [ ] - Player death
+[ ] - Rocket launch

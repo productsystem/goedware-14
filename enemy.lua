@@ -25,6 +25,9 @@ function Enemy.new(x,y,world)
         walk = anim8.newAnimation(g('1-4',1),0.1),
     }
     self.currentAnim = self.animations.idle
+    self.hitFlashTimer = 0
+    self.hitFlashDuration = 0.2
+
     return self
 end
 
@@ -58,11 +61,20 @@ function Enemy:update(dt,player)
     end
 
     self.currentAnim:update(dt)
+    if self.hitFlashTimer > 0 then
+        self.hitFlashTimer = self.hitFlashTimer - dt
+    end
 end
 
 function Enemy:draw()
-    love.graphics.setColor(1, 1, 1, 1)
+    if self.hitFlashTimer > 0 then
+        love.graphics.setColor(1, 0.4, 0.4, 0.6)
+    else
+        love.graphics.setColor(1, 1, 1, 1)
+    end
+
     self.currentAnim:draw(self.image, self.x, self.y)
+    love.graphics.setColor(1, 1, 1, 1)
 end
 
 function Enemy:getYDraw()
@@ -71,7 +83,9 @@ end
 
 function Enemy:takeDamage(amt)
     self.health = self.health - amt
+    self.hitFlashTimer = self.hitFlashDuration
 end
+
 
 function Enemy:isDead()
     return self.health <= 0
