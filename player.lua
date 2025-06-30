@@ -117,7 +117,7 @@ function Player:pickupAndDrop(items)
         for _,item in ipairs(items) do
             if not item.picked then
                 local ix,iy = item.x + item.w/2, item.y + item.h/2
-                if math.sqrt((px-ix)^2 + (py-iy)^2) < 30 then
+                if math.sqrt((px-ix)^2 + (py-iy)^2) < 70 then
                     item.picked = true
                     self.holdingItem = item
                     break

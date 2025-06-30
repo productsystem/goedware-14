@@ -9,7 +9,7 @@ gameMusic:setLooping(true)
 currentMenu = nil
 local buttons = {}
 local font = love.graphics.newFont("fonts/PressStart2P-Regular.ttf", 24)
-local titleFont = love.graphics.newFont("fonts/PressStart2P-Regular.ttf",48)
+local titleFont = love.graphics.newFont("fonts/PressStart2P-Regular.ttf",42)
 
 local title = ""
 local backgroundColor = {0.1, 0.1, 0.1, 0.8}
@@ -58,7 +58,7 @@ function Menu.load()
     switchToMusic(menuMusic)
     love.graphics.setDefaultFilter("nearest", "nearest")
     currentMenu = "main"
-    title = "Juno's Return"
+    title = "Juno's Journey"
     backgroundColor = {0.05, 0.05, 0.05, 0.9}
     buttons = {
         { label = "Start Game", action = function()
