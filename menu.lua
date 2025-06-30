@@ -1,5 +1,10 @@
 local Menu = {}
 local clickSound = love.audio.newSource("sounds/button.wav", "static")
+local menuMusic = love.audio.newSource("music/menu.wav", "stream")
+local gameMusic = love.audio.newSource("music/game.wav", "stream")
+
+menuMusic:setLooping(true)
+gameMusic:setLooping(true)
 
 currentMenu = nil
 local buttons = {}
@@ -12,6 +17,7 @@ local backgroundColor = {0.1, 0.1, 0.1, 0.8}
 
 local planetImage = love.graphics.newImage("sprites/planet.png")
 local playerImage = love.graphics.newImage("sprites/player.png")
+local back = love.graphics.newImage("sprites/back.png")
 local playerAngle = 0
 
 local gameOverMessage = ""
@@ -24,18 +30,24 @@ local cutsceneData = {
     },
     {
         sprite = love.graphics.newImage("sprites/player.png"),
-        text = "Juno. Use WASD to move. Left click to attack in that direction to harvest items. Press E to pick-up items."
+        text = "Juno. Use WASD to move. Left click to attack in that direction to harvest items. Press E to pick-up and drop items."
     },
     {
         sprite = love.graphics.newImage("sprites/grinder.png"),
-        text = "This is Mr.Grinder, scary, but your friend. Toss items with E inside to gain oil. Oil doubles as your health, so be careful."
+        text = "This is Grind-Mk1, scary, but your friend. Toss items with E inside to gain oil. Oil doubles as your health, so be careful."
     },
     {
         sprite = love.graphics.newImage("sprites/rocket.png"),
-        text = "Load oil into the Rocket to launch it with holding R and complete your mission. [REDACTED] must also be injected with R. Good luck!"
+        text = "Load oil into the Rocket to launch it with holding R and complete your mission. [REDACTED] must also be injected with R. Board the full rocket with E. Good luck!"
     }
 }
 
+local function switchToMusic(music)
+    if love.audio.getActiveSourceCount then
+        love.audio.stop()
+    end
+    music:play()
+end
 
 function Menu.resume()
     Menu.load()
@@ -43,9 +55,10 @@ end
 
 
 function Menu.load()
+    switchToMusic(menuMusic)
     love.graphics.setDefaultFilter("nearest", "nearest")
     currentMenu = "main"
-    title = "Project Oil"
+    title = "Juno's Return"
     backgroundColor = {0.05, 0.05, 0.05, 0.9}
     buttons = {
         { label = "Start Game", action = function()
@@ -121,6 +134,7 @@ function Menu.draw()
     love.graphics.rectangle("fill", 0, 0, screenW, screenH)
 
     if currentMenu == "main" then
+        -- love.graphics.draw(back,0,0)
         if planetImage then
             local scale = 3
             local planetW = planetImage:getWidth() * scale
@@ -239,6 +253,7 @@ function Menu.mousepressed(x, y, button)
         if cutsceneStage + 1 >= #cutsceneData then
             cutsceneStage = nil
             currentMenu = nil
+            switchToMusic(gameMusic)
             initGame()
         else
             cutsceneStage = cutsceneStage + 1
@@ -284,6 +299,7 @@ end
 
 function Menu.showGameOver(orbCollected)
     currentMenu = "gameover"
+    switchToMusic(menuMusic)
     if orbCollected then
         gameOverMessage = "Mission complete. You’ve recovered the [REDACTED]. We are safe... for now."
     else

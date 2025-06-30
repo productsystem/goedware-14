@@ -3,8 +3,8 @@ Things To-Do:
 [x] - Main menu
 [x] - Player animations
 [x] - Grinder animations
-[ ] - Music
-[ ] - SFX
+[x] - Music
+[x] - SFX
 [x] - Oil values set
 [x] - Collection and hit radius set
 [x] - Story/Tutorial
